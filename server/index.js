@@ -4,6 +4,7 @@ import generateOTP from './utils/otpGenerator.js';
 import { generateOTPAndSend } from './controllers/generateOTPAndSend.js';
 import bodyParser from 'body-parser';
 import verifyOTP from './controllers/verifyOTP.js';
+import submitFeedback from './controllers/submitFeedback.js';
 
 const app = express();
 const tempUserData = {};
@@ -20,6 +21,8 @@ app.get('/',( req, res)=>{
 
 app.post('/generate-otp', generateOTPAndSend);
 app.post('/verify-otp', verifyOTP);
+app.post('/submit-feedback',submitFeedback);
+
 
 app.listen(8000,()=>{
     console.log('Server is running at Port', 8000);      
