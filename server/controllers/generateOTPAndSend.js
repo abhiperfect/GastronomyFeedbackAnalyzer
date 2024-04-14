@@ -7,14 +7,14 @@ import generateUniqueId from 'generate-unique-id';
 export async function generateOTPAndSend(req, res) {
   try {
     // Extract user information from the request body
-    const { firstName, lastName, email, phoneNumber } = req.body;
+    const { firstName, lastName, email, phoneNumber, password } = req.body;
 
     // Generate a unique ID for the user
     const userId = generateUniqueId();
 
     // Generate a 6-digit OTP
     const otp = generateOTP();
-    insertUserIntoTempDatabase(userId, firstName, lastName, email, phoneNumber, otp);
+    insertUserIntoTempDatabase(userId, firstName, lastName, email, phoneNumber, password,otp);
     
     // Send the OTP to the user (implementation omitted for brevity)
 

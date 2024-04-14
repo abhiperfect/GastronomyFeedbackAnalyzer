@@ -1,16 +1,18 @@
 import connectToDatabase from '../db/postgresClient.js'
+import bcrypt from 'bcrypt';
 
-async function insertUserIntoTempDatabase(userId, firstName, lastName, email, phoneNumber, otp) {
+async function insertUserIntoTempDatabase(userId, firstName, lastName, email, phoneNumber, password,otp) {
   try {
     const db = connectToDatabase();
-    const query = 'INSERT INTO userstemp (user_id, first_name, last_name, email, phone_number, otp) VALUES ($1, $2, $3, $4, $5,$6)';
-    const values = [userId, firstName, lastName, email, phoneNumber,otp];
+    const passwordHash = await bcrypt.hash(password, 10); // 10 is the salt rounds
+    const query = 'INSERT INTO userstemp (user_id, first_name, last_name, email, phone_number,password_hash, otp) VALUES ($1, $2, $3, $4, $5,$6,$7)';
+    const values = [userId, firstName, lastName, email, phoneNumber, passwordHash ,otp];
     await db.query(query, values);
     
-    console.log('User inserted into the database successfully.');
+    console.log('User inserted into the Temp database successfully.');
     return true; // Return true if insertion is successful
   } catch (error) {
-    console.error('Error inserting user into database:', error);
+    console.error('Error inserting user into Temp database:', error);
     return false; // Return false if there's an error
   }
 }

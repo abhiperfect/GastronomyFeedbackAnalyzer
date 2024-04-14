@@ -7,7 +7,6 @@ import verifyOTP from './controllers/verifyOTP.js';
 import submitFeedback from './controllers/submitFeedback.js';
 
 const app = express();
-const tempUserData = {};
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
