@@ -14,8 +14,10 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useNavigate } from "react-router-dom";
 
 const ExpandMore = styled((props) => {
+  
   const { expand, ...other } = props;
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
@@ -27,15 +29,24 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function HotelCard() {
+  const navigate = useNavigate();
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+const handleCardClick = () =>{
+  navigate("/feedbackpage", {
+    state: {
+      // phoneNumber,
+    },
+  });    
+};
 
   return (
     <Card sx={{ maxWidth: 345, margin:'20px' }}
     style={{ cursor:'pointer'}}
+    onClick={handleCardClick}
     >
       <CardHeader
         avatar={
