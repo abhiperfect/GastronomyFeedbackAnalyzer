@@ -10,6 +10,8 @@ import { styled } from "@mui/material/styles";
 import Footer from "../components/common/Footer.jsx";
 import { Typography } from "@mui/material";
 import ListHero from "../components/Hostel/ListHero.jsx";
+import UserHeader from "../components/common/UserHeader.jsx";
+
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -23,7 +25,7 @@ export default function HotelsList() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Header />
+      <UserHeader />
       <Container
         maxWidth="false"
         style={{
