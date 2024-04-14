@@ -9,6 +9,7 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Footer from "../components/common/Footer.jsx";
 import { Typography } from "@mui/material";
+import ListHero from "../components/Hostel/ListHero.jsx";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -28,30 +29,21 @@ export default function HotelsList() {
         style={{
           padding: "0",
           backgroundImage: `linear-gradient(180deg, #CEE5FD, #FFF)`, // Background image style
-          mt:10,
+          mt: 10,
         }}
       >
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            justifyContent:'center',
-            alignItems:'center' ,
+            justifyContent: "center",
+            alignItems: "center",
             textAlign: "center",
             pt: 14, // Add padding top
-            maxWidth:'100vp'
+            maxWidth: "100vp",
           }}
         >
-          <Box maxWidth='600px'>
-          <Typography variant="h3" component="h1" gutterBottom >
-          Explore Guest Feedback & Reviews for Hotels - Share Your Experience!
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            Find your perfect stay from our curated selection of top-rated
-            hotels.
-          </Typography>
-          </Box>
-
+          <ListHero />
         </Box>
         <Box
           sx={{
