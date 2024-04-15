@@ -16,6 +16,7 @@
     "express": "^4.19.2",
     "generate-unique-id": "^2.0.3",
     "otp-generator": "^4.0.1",
-    "pg": "^8.11.5"
+    "pg": "^8.11.5",
+    "sentiment": "^5.0.2"
   }
 }
