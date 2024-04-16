@@ -1,14 +1,15 @@
 // context.js
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import axios from "axios";
 
 const FeedbackContext = createContext();
 const UserContext = createContext();
+const AttributesCount = createContext();
 
 const Provider = ({ children }) => {
   const [feedbackData, setFeedbackData] = useState([]);
   const [userData, setUserData] = useState([]);
-  const [ atrributesCount, setAttributsCount ] = useState([]);
+  const [attributesCount, setAttributsCount] = useState([]);
   useEffect(() => {
     // Fetch feedback data from the backend
     fetchFeedbackData();
@@ -20,25 +21,27 @@ const Provider = ({ children }) => {
 
   const fetchFeedbackData = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/sentiment');
+      const response = await axios.get("http://localhost:8000/api/sentiment");
       const data = response.data;
-      console.log("Context",data);
+      console.log("Context", data);
       setFeedbackData(data);
     } catch (error) {
-      console.error('Error fetching feedback data:', error);
+      console.error("Error fetching feedback data:", error);
     }
   };
 
-  const fetchAttributesCount = async () =>{
+  const fetchAttributesCount = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/getattributescount");
-      const data = response.data; 
+      const response = await axios.get(
+        "http://localhost:8000/getattributescount"
+      );
+      const data = response.data;
       console.log(data);
-      setAttributsCount(data);  
+      setAttributsCount(data);
     } catch (error) {
-       console.log("Error in fetching attributes count", error);
+      console.log("Error in fetching attributes count", error);
     }
-  }
+  };
   const fetchUserData = async () => {
     // try {
     //   const response = await axios.get('YOUR_USER_API_ENDPOINT');
@@ -52,7 +55,9 @@ const Provider = ({ children }) => {
   return (
     <FeedbackContext.Provider value={{ feedbackData }}>
       <UserContext.Provider value={{ userData }}>
-        {children}
+        <AttributesCount.Provider value={{attributesCount}}>
+          {children}
+        </AttributesCount.Provider>
       </UserContext.Provider>
     </FeedbackContext.Provider>
   );
@@ -61,4 +66,6 @@ const Provider = ({ children }) => {
 const useFeedbackContext = () => useContext(FeedbackContext);
 const useUserContext = () => useContext(UserContext);
 
-export { Provider, useFeedbackContext, useUserContext };
+const useAttributesCount = () => useContext(AttributesCount);
+
+export { Provider, useFeedbackContext, useUserContext,useAttributesCount };

@@ -10,9 +10,9 @@ export default function HotelDetail() {
     <React.Fragment>
       <CssBaseline />
       <Container maxWidth="false" 
-      style={{paddingLeft:'10%', paddingRight:'10%'}}
+      style={{paddingLeft:'10%', paddingRight:'10%', paddingBottom:'150px'}}
       >
-        <Box sx={{ bgcolor: "", height: "100vh" }}>
+        <Box sx={{ bgcolor: "", height: "20vh" }}>
           <Box sx={{ display:'flex', justifyContent:'space-between'}}>
             <Heading />
             <RatingPaper />

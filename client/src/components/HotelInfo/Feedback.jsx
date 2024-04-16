@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import FormHelperText from "@mui/material/FormHelperText";
 import { Typography } from "@mui/material";
-
+import axios from "axios";
 export default function Feedback({ children }) {
   const [foodQuality, setFoodQuality] = useState("");
   const [cleanliness, setCleanliness] = useState("");
@@ -33,8 +33,34 @@ export default function Feedback({ children }) {
   };
 
 
-  const handleSubmit = (e) => {
+  const  handleSubmit = async (e) => {
+    
     e.preventDefault();
+    const formData = {
+      foodQuality,
+      cleanliness,
+      menuVariety,
+      staffFriendliness,
+      comments,
+      age,
+      gender,
+      nationality,
+      city,
+      mealPreference,
+      mealTimes,
+      suggestions,
+      lengthOfStay,
+      overallSatisfaction
+    };
+    
+    console.log(formData);
+    try {
+      const response = await axios.post('http://localhost:8000/submitfeedback');
+      
+    } catch (error) {
+       console.log("Eorro in submiting feedback details", error);
+    }
+
     // Logic to handle form submission
   };
   // Validate ratings to be between 1 and 5
