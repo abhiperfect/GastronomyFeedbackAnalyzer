@@ -20,14 +20,18 @@ export default function Feedback({ children }) {
   const [comments, setComments] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
-  const [nationality, setNationality] = useState("");
   const [lengthOfStay, setLengthOfStay] = useState("");
   const [mealPreference, setMealPreference] = useState("");
   const [mealTimes, setMealTimes] = useState("");
   const [suggestions, setSuggestions] = useState("");
   const [overallSatisfaction, setOverallSatisfaction] = useState("");
   const [city, setCity] = useState("");
-  const [timing, setTiming] = useState("");
+  const [nationality, setNationality] = useState('');
+
+  const handleNationalityChange = (event) => {
+    setNationality(event.target.value);
+  };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -169,24 +173,33 @@ export default function Feedback({ children }) {
               </Grid>
               {/* Nationality */}
               <Grid item xs={6}>
-                <TextField
-                  label="Nationality"
-                  value={nationality}
-                  onChange={(e) => setNationality(e.target.value)}
-                  fullWidth
-                  required
-                />
+                <FormControl fullWidth required>
+                  <InputLabel id="nationality-label">Nationality</InputLabel>
+                  <Select
+                    labelId="nationality-label"
+                    id="nationality"
+                    value={nationality}
+                    onChange={handleNationalityChange}
+                  >
+                    <MenuItem value="IND">India</MenuItem>
+                    <MenuItem value="USA">USA</MenuItem>
+                    <MenuItem value="UK">UK</MenuItem>
+                    <MenuItem value="Canada">Canada</MenuItem>
+                    {/* Add more countries as needed */}
+                  </Select>
+                </FormControl>
               </Grid>
-              {/* Length of Stay */}
+              {/* City */}
               <Grid item xs={6}>
                 <TextField
-                  label="Length of Stay"
-                  value={lengthOfStay}
-                  onChange={(e) => setLengthOfStay(e.target.value)}
+                  label="City"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
                   fullWidth
                   required
                 />
               </Grid>
+
               {/* Meal Preference */}
               <Grid item xs={6}>
                 <FormControl fullWidth required>
@@ -233,6 +246,16 @@ export default function Feedback({ children }) {
                   required
                 />
               </Grid>
+              {/* Length of Stay */}
+              <Grid item xs={6}>
+                <TextField
+                  label="Length of Stay"
+                  value={lengthOfStay}
+                  onChange={(e) => setLengthOfStay(e.target.value)}
+                  fullWidth
+                  required
+                />
+              </Grid>
               {/* Overall Satisfaction */}
               <Grid item xs={6}>
                 <FormControl
@@ -264,27 +287,7 @@ export default function Feedback({ children }) {
                   )}
                 </FormControl>
               </Grid>
-              {/* City */}
-              <Grid item xs={6}>
-                <TextField
-                  label="City"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  fullWidth
-                  required
-                />
-              </Grid>
-              {/* Timing */}
-              <Grid item xs={12}>
-                <TextField
-                  label="Timing"
-                  placeholder="In Days"
-                  value={timing}
-                  onChange={(e) => setTiming(e.target.value)}
-                  fullWidth
-                  required
-                />
-              </Grid>
+
               {/* Submit Button */}
               <Grid item xs={12}>
                 <Button
