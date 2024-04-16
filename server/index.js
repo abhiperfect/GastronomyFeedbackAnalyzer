@@ -7,6 +7,7 @@ import verifyOTP from "./controllers/verifyOTP.js";
 import submitFeedback from "./controllers/submitFeedback.js";
 import statisticsRoute from "./middleware/feedbackStatistics.js";
 import sentimentRoute from "./middleware/feedbackSentiment.js";
+import attributesCountsOfQuantData from "./services/attributesCountsOfQuantData.js";
 import cors from 'cors';
 
 const app = express();
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
   res.send("Server is ok");
 });
 
+app.get("/getattributescount",attributesCountsOfQuantData);
 app.post("/generate-otp", generateOTPAndSend);
 app.post("/verify-otp", verifyOTP);
 app.post("/submit-feedback", submitFeedback);
