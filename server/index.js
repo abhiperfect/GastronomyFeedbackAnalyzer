@@ -7,6 +7,7 @@ import verifyOTP from "./controllers/verifyOTP.js";
 import submitFeedback from "./controllers/submitFeedback.js";
 import statisticsRoute from "./middleware/feedbackStatistics.js";
 import sentimentRoute from "./middleware/feedbackSentiment.js";
+import cors from 'cors';
 
 const app = express();
 
@@ -14,6 +15,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
+app.use(cors());
 app.use("/api", statisticsRoute);
 app.use("/api", sentimentRoute);
 
@@ -25,7 +27,6 @@ app.post("/generate-otp", generateOTPAndSend);
 app.post("/verify-otp", verifyOTP);
 app.post("/submit-feedback", submitFeedback);
 
-app.get("");
 
 app.listen(8000, () => {
   console.log("Server is running at Port", 8000);
