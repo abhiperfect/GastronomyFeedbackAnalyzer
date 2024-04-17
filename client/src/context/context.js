@@ -2,20 +2,21 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
-const FeedbackContext = createContext();
+const SentimentAnalysisContext = createContext();
 const UserContext = createContext();
 const AttributesCount = createContext();
 const DataAnalysisContext = createContext();
 
 const Provider = ({ children }) => {
-  const [feedbackData, setFeedbackData] = useState([]);
+
   const [userData, setUserData] = useState([]);
   const [attributesCount, setAttributsCount] = useState([]);
   const [dataAnalysis, setDataAnalysis] = useState([]);
+  const [ sentimentAnalysis, setSentimentAnalysis ] = useState([]);
 
   useEffect(() => {
     // Fetch feedback data from the backend
-    fetchFeedbackData();
+    fetchSentimentAnalysisData();
     // Fetch user data from the backend
     fetchUserData();
     //Fetch attributes count
@@ -26,12 +27,17 @@ const Provider = ({ children }) => {
     
   }, []);
 
-  const fetchFeedbackData = async () => {
+  const fetchSentimentAnalysisData = async () => {
     try {
       const response = await axios.get("http://localhost:8000/api/sentiment");
       const data = response.data;
-      console.log("Senti", data);
-      setFeedbackData(data);
+      setSentimentAnalysis(data);
+      console.log("TT", sentimentAnalysis);
+      setSentimentAnalysis(prevData => {
+        console.log("Sentiment Analysis 3:", prevData);
+        console.log("Sentiment Analysis 4:", data); // This will reflect the updated state
+        return data;
+      });
     } catch (error) {
       console.error("Error fetching feedback data:", error);
     }
@@ -78,8 +84,9 @@ const fetchDataAnalysis = async () => {
     // }
   };
 
+
   return (
-    <FeedbackContext.Provider value={{ feedbackData }}>
+    <SentimentAnalysisContext.Provider value={{ sentimentAnalysis }}>
       <UserContext.Provider value={{ userData }}>
         <AttributesCount.Provider value={{ attributesCount }}>
           <DataAnalysisContext.Provider value={{ dataAnalysis }}>
@@ -87,18 +94,18 @@ const fetchDataAnalysis = async () => {
           </DataAnalysisContext.Provider>
         </AttributesCount.Provider>
       </UserContext.Provider>
-    </FeedbackContext.Provider>
+    </SentimentAnalysisContext.Provider>
   );
 };
 
-const useFeedbackContext = () => useContext(FeedbackContext);
+const useSentimentAnalysisContext = () => useContext(SentimentAnalysisContext);
 const useUserContext = () => useContext(UserContext);
 const useAttributesCount = () => useContext(AttributesCount);
 const useDataAnalysisContext = () => useContext(DataAnalysisContext);
 
 export {
   Provider,
-  useFeedbackContext,
+  useSentimentAnalysisContext,
   useUserContext,
   useAttributesCount,
   useDataAnalysisContext,
