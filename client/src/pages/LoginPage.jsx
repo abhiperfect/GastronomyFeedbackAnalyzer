@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,46 +14,46 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        ResponseIQ
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-// TODO remove, this demo shouldn't need to reset the theme.
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
 export default function LoginPage() {
-  const handleSubmit = (event) => {
+  const navigate = useNavigate();
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    try {
+      const response = await axios.post("http://localhost:8000/login", {
+        email,
+        password,
+      });
+
+      if (response.data.success) {
+        // Redirect to the desired page upon successful login
+        navigate("/hotellist", {
+          state: {
+            // phoneNumber,
+          },
+        });
+      } else {
+        alert(response.data.message); // Show error message if login fails
+      }
+    } catch (error) {
+      console.error("Error logging in:", error);
+      alert("An error occurred. Please try again."); // Show generic error message
+    }
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: "100vh" }}
-      
-      >
+      <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
-        <Header></Header>
+        <Header />
         <Grid
           item
           xs={false}
@@ -71,14 +71,15 @@ export default function LoginPage() {
             backgroundPosition: "center",
           }}
         />
-         <Box
-    sx={{
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      backgroundImage: 'linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,1))',
-    }}
-  />
+        <Box
+          sx={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            backgroundImage:
+              "linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,1))",
+          }}
+        />
         <Grid
           item
           xs={12}
@@ -103,7 +104,6 @@ export default function LoginPage() {
               alignItems: "center",
               mt: "100px",
             }}
-           
           >
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />

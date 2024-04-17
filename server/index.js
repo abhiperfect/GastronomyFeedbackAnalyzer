@@ -14,6 +14,10 @@ import { insertUserIntoTempDatabase } from "./controllers/insertUserIntoTempData
 import nodemailer from 'nodemailer';
 import cors from "cors";
 import sendOtpEmail from "./services/sendOtpEmail.js";
+import bcrypt from 'bcrypt';
+import getOTPByEmail from "./controllers/getOTPByEmail.js";
+import userLogin from "./controllers/userLogin.js";
+
 const app = express();
 
 // parse application/x-www-form-urlencoded
@@ -33,6 +37,9 @@ app.get("/getattributescount", attributesCountsOfQuantData);
 app.post("/signup", generateOTPAndSend);
 app.post("/verify-otp", verifyOTP);
 app.post("/submit-feedback", submitFeedback);
+app.post('/login',userLogin);
+
+
 
 
 app.listen(8000, () => {
