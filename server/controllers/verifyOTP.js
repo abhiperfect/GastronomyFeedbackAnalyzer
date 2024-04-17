@@ -7,10 +7,9 @@ export default async function verifyOTP(req, res) {
     // Extract user ID and OTP from the request body
     const { userId, otp } = req.body;
 
-    // Retrieve user data from temporary storage (replace this with your actual data storage mechanism)
+    // Retrieve user data from temporary storage (replace this with your actual data storage mechanism) 
     const userData = await getUserByIdFromTempDB(userId);
     // Check if user data exists and if the OTP matches
-
     if (userData && userData.otp === otp) {
       await createUser(userData.first_name, userData.last_name, userData.email, userData.phone_number, userData.password_hash);
       // OTP is verified successfully

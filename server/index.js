@@ -9,8 +9,11 @@ import statisticsRoute from "./middleware/feedbackStatistics.js";
 import sentimentRoute from "./middleware/feedbackSentiment.js";
 import attributesCountsOfQuantData from "./services/attributesCountsOfQuantData.js";
 import calculateTotalRating from "./services/calculateTotalRating.js";
-import cors from 'cors';
-
+import generateUniqueId from "generate-unique-id";
+import { insertUserIntoTempDatabase } from "./controllers/insertUserIntoTempDatabase.js";
+import nodemailer from 'nodemailer';
+import cors from "cors";
+import sendOtpEmail from "./services/sendOtpEmail.js";
 const app = express();
 
 // parse application/x-www-form-urlencoded
@@ -25,9 +28,9 @@ app.get("/", (req, res) => {
   res.send("Server is ok");
 });
 
-app.get('/totalrating',calculateTotalRating);
-app.get("/getattributescount",attributesCountsOfQuantData);
-app.post("/generate-otp", generateOTPAndSend);
+app.get("/totalrating", calculateTotalRating);
+app.get("/getattributescount", attributesCountsOfQuantData);
+app.post("/signup", generateOTPAndSend);
 app.post("/verify-otp", verifyOTP);
 app.post("/submit-feedback", submitFeedback);
 

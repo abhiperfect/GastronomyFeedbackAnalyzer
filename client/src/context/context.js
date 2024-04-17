@@ -12,7 +12,10 @@ const Provider = ({ children }) => {
   const [userData, setUserData] = useState([]);
   const [attributesCount, setAttributesCount] = useState([]);
   const [dataAnalysis, setDataAnalysis] = useState([]);
-  const [totalFeedback, setTotalFeedback] = useState(null);
+  const [totalFeedback, setTotalFeedback] = useState({
+    rating : 0,
+    totalFeedback:0
+  });
 
   useEffect(() => {
     fetchSentimentAnalysisData();
