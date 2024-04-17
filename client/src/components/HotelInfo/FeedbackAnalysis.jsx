@@ -6,7 +6,7 @@ import AttributesCountBarAnimation from "./AttributesCountBarAnimation";
 import AttributesBarHeading from "./AttributesBarHeading";
 import { Divider } from "@mui/material";
 import BarAnimationTwo from "./BarAnimationTwo";
-import SentimentPiChartAnimation from "./SentimentPiCharAnimation";
+import SentimentPieChart from "./SentimentPieChart";
 
 export default function FeedbackAnalysis() {
   return (
@@ -23,7 +23,7 @@ export default function FeedbackAnalysis() {
           <Divider />
           <BarAnimationTwo/>
           <Divider />
-        <SentimentPiChartAnimation/>
+          <SentimentPieChart/>
         </Box>
       </Container>
     </React.Fragment>
