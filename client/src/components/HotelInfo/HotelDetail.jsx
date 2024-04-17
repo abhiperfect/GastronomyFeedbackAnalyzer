@@ -4,13 +4,13 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Heading from "../common/Heading";
 import RatingPaper from "./RatingPaper";
-
+import Gmap from "./Gmap";
 export default function HotelDetail() {
   return (
     <React.Fragment>
       <CssBaseline />
       <Container maxWidth="false" 
-      style={{paddingLeft:'10%', paddingRight:'10%', paddingBottom:'150px'}}
+      style={{paddingLeft:'10%', paddingRight:'10%', paddingBottom:'50px'}}
       >
         <Box sx={{ bgcolor: "", height: "20vh" }}>
           <Box sx={{ display:'flex', justifyContent:'space-between'}}>
@@ -18,6 +18,7 @@ export default function HotelDetail() {
             <RatingPaper />
           </Box>
         </Box>
+             <Gmap/>
       </Container>
     </React.Fragment>
   );
