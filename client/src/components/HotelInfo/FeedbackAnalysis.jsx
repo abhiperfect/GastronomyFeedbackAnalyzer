@@ -6,14 +6,14 @@ import AttributesCountBarAnimation from "./AttributesCountBarAnimation";
 import AttributesBarHeading from "./AttributesBarHeading";
 import { Divider } from "@mui/material";
 import BarAnimationTwo from "./BarAnimationTwo";
-import SentimentPieChart from "./SentimentPieChart";
+import SentimentPiChartAnimation from "./SentimentPiCharAnimation";
 
 export default function FeedbackAnalysis() {
   return (
     <React.Fragment>
       <CssBaseline />
       <Container maxWidth="false" style={{}}>
-        <Box sx={{ bgcolor: "", height: "" }}>
+        <Box sx={{ bgcolor: "", height:'',}}>
           <Box
             sx={{ display: "flex", justifyContent: "center", margin: "20px" }}
           >
@@ -21,9 +21,9 @@ export default function FeedbackAnalysis() {
           </Box>
           <AttributesCountBarAnimation />
           <Divider />
-          <BarAnimationTwo />
+          <BarAnimationTwo/>
           <Divider />
-          <SentimentPieChart />
+        <SentimentPiChartAnimation/>
         </Box>
       </Container>
     </React.Fragment>
