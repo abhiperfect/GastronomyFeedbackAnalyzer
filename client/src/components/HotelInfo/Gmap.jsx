@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import dotenv from "react-dotenv";
 
 const containerStyle = {
   width: "100%",
@@ -31,7 +32,7 @@ function Gmap() {
 
   return (
     <LoadScript
-      googleMapsApiKey="AIzaSyClC39JhKoNq-xEiM6ENJEsQz4Z6ymwztQ"
+      googleMapsApiKey={process.env.REACT_APP_API_KEY}
     >
       <GoogleMap
         mapContainerStyle={containerStyle}

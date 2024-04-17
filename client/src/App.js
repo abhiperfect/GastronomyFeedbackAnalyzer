@@ -12,6 +12,7 @@ import HotelsList from "./pages/HotelsList";
 import FeedbackPage from "./pages/FeedbackPage";
 import { Provider } from "./context/context";
 
+
 function App() {
   return (
     <>
