@@ -3,6 +3,24 @@ import selectQuantitativeData from "../services/selectQuantitativeData.js";
 
 const app = express();
 
+// Mapping object for long and short notations
+const notationMapping = {
+  food_quality: "Food Quality",
+  cleanliness: "Cleanliness",
+  menu_variety: "Menu Variety",
+  staff_friendliness: "Staff Friendliness",
+  overall_satisfaction: "Overall",
+};
+
+function transformData(data) {
+  const transformedData = Object.keys(data).map((key) => ({
+    coefficientOfVariation: data[key].coefficientOfVariation,
+    label: notationMapping[key], // Replace with short notation
+  }));
+
+  return transformedData;
+}
+
 // Function to calculate mean
 const calculateMean = (values) =>
   values.reduce((acc, val) => acc + val, 0) / values.length;
@@ -32,19 +50,16 @@ const calculateStandardDeviation = (values, mean) => {
 
 // Function to calculate coefficient of variation
 const calculateCoefficientOfVariation = (standardDeviation, mean) =>
-  (standardDeviation / mean) * 100;
+  100 - (standardDeviation / mean) * 100;
 
 // Calculate summary statistics
 app.get("/statistics", async (req, res) => {
   const data = await selectQuantitativeData();
-  // console.log("UserData: ", userData);
   const numericalFields = [
     "food_quality",
     "cleanliness",
     "menu_variety",
     "staff_friendliness",
-    "age",
-    "length_of_stay",
     "overall_satisfaction",
   ];
   const statistics = {};
@@ -62,16 +77,12 @@ app.get("/statistics", async (req, res) => {
     );
 
     statistics[field] = {
-      mean,
-      median,
-      mode,
-      standardDeviation,
       coefficientOfVariation,
     };
   });
-
-  // console.log(statistics);
-  res.json(statistics);
+  const transformedData = transformData(statistics);
+  console.log(transformedData);  
+  res.json(transformedData);
 });
 
 export default app;

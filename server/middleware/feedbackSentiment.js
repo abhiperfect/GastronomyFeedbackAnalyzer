@@ -4,7 +4,7 @@ import getSuggestions from '../services/getSuggestions.js';
 import getComments from '../services/getComments.js';
 import categorizeSuggestions from './categorizedSuggestions.js';
 import categorizeComments from './categorizeComments.js';
-
+import formatData from '../services/formatSentimentData.js';
 
 const app = express();
 
@@ -25,8 +25,15 @@ app.get('/sentiment',async (req, res) => {
   const categorizedComments = await categorizeComments(commentSentiments);
   const categorizedSuggestions = await categorizeSuggestions(suggestionSentiments);
 
-  // Return sentiment analysis results in the response
-  res.json({ categorizedComments, categorizedSuggestions });
+  const inputData = {
+  categorizedComments: categorizedComments,
+  categorizedSuggestions: categorizedSuggestions,
+};
+
+  const formattedData =  formatData(inputData);
+
+
+  res.json({ formattedData });
 });
 
 export default app;
