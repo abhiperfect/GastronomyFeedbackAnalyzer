@@ -5,11 +5,14 @@ import axios from "axios";
 const FeedbackContext = createContext();
 const UserContext = createContext();
 const AttributesCount = createContext();
+const DataAnalysisContext = createContext();
 
 const Provider = ({ children }) => {
   const [feedbackData, setFeedbackData] = useState([]);
   const [userData, setUserData] = useState([]);
   const [attributesCount, setAttributsCount] = useState([]);
+  const [dataAnalysis, setDataAnalysis] = useState([]);
+
   useEffect(() => {
     // Fetch feedback data from the backend
     fetchFeedbackData();
@@ -17,18 +20,41 @@ const Provider = ({ children }) => {
     fetchUserData();
     //Fetch attributes count
     fetchAttributesCount();
+    //Fetch Coffecient variations
+    fetchDataAnalysis();
+
+    
   }, []);
 
   const fetchFeedbackData = async () => {
     try {
       const response = await axios.get("http://localhost:8000/api/sentiment");
       const data = response.data;
-      console.log("Context", data);
+      console.log("Senti", data);
       setFeedbackData(data);
     } catch (error) {
       console.error("Error fetching feedback data:", error);
     }
   };
+const fetchDataAnalysis = async () => {
+  try {
+    const response = await axios.get("http://localhost:8000/api/statistics");
+    const data = response.data;
+    console.log("Coefficient variations:", data);
+    setDataAnalysis(data); // Set dataAnalysis state
+    console.log("Coefficient variations2:", data); // This won't reflect the updated state
+    setDataAnalysis(prevData => {
+      console.log("Coefficient variations3:", prevData);
+      console.log("Coefficient variations4:", data); // This will reflect the updated state
+      return data;
+    });
+  } catch (error) {
+    console.error("Error fetching coefficient variations:", error);
+  }
+  
+};
+
+
 
   const fetchAttributesCount = async () => {
     try {
@@ -55,8 +81,10 @@ const Provider = ({ children }) => {
   return (
     <FeedbackContext.Provider value={{ feedbackData }}>
       <UserContext.Provider value={{ userData }}>
-        <AttributesCount.Provider value={{attributesCount}}>
-          {children}
+        <AttributesCount.Provider value={{ attributesCount }}>
+          <DataAnalysisContext.Provider value={{ dataAnalysis }}>
+            {children}
+          </DataAnalysisContext.Provider>
         </AttributesCount.Provider>
       </UserContext.Provider>
     </FeedbackContext.Provider>
@@ -65,7 +93,13 @@ const Provider = ({ children }) => {
 
 const useFeedbackContext = () => useContext(FeedbackContext);
 const useUserContext = () => useContext(UserContext);
-
 const useAttributesCount = () => useContext(AttributesCount);
+const useDataAnalysisContext = () => useContext(DataAnalysisContext);
 
-export { Provider, useFeedbackContext, useUserContext,useAttributesCount };
+export {
+  Provider,
+  useFeedbackContext,
+  useUserContext,
+  useAttributesCount,
+  useDataAnalysisContext,
+};
