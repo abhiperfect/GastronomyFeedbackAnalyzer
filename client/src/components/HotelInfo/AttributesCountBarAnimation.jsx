@@ -46,8 +46,7 @@ export default function AttributesCountBarAnimation() {
 
   useEffect(() => {
     setReplacedLabels(replaceLabels(data));
-    console.log("sssssssssssssssssssssssssssssssssssss", replacedLabels);
-  }, []);
+  }, [attributesCount.data]);
 
   return (
     <Box sx={{ width: "100%" }}>
