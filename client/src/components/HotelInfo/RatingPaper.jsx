@@ -8,6 +8,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import StarIcon from "@mui/icons-material/Star";
+import { useTotalFeedbackContext } from "../../context/context";
 
 const DemoPaper = styled(Paper)(({ theme }) => ({
   width: 120,
@@ -18,6 +19,7 @@ const DemoPaper = styled(Paper)(({ theme }) => ({
 }));
 
 export default function RatingPaper() {
+  const { totalFeedback } = useTotalFeedbackContext();
   return (
     <Stack direction="row" spacing={2}>
       <DemoPaper square={false}>
@@ -25,7 +27,8 @@ export default function RatingPaper() {
           sx={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "space-evenly",
+            justifyContent: "center",
+
           }}
         >
           <Box
@@ -49,7 +52,7 @@ export default function RatingPaper() {
                 gutterBottom
                 sx={{ color: "white", display: "flex" }}
               >
-                4.0
+                {totalFeedback.rating}
               </Typography>
             </Box>
           </Box>
@@ -63,7 +66,8 @@ export default function RatingPaper() {
             <StarIcon sx={{ fontSize: 36, color: "white" }} />
           </Box>
         </Box>
-        <Box>88 Feedback</Box>
+
+        <Box sx={{ fontSize:11}}> { totalFeedback.totalFeedback} Feedback</Box>
       </DemoPaper>
     </Stack>
   );

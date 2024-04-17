@@ -5,19 +5,32 @@ const SentimentAnalysisContext = createContext();
 const UserContext = createContext();
 const AttributesCountContext = createContext();
 const DataAnalysisContext = createContext();
+const TotalFeedbackContext = createContext();
 
 const Provider = ({ children }) => {
   const [sentimentAnalysis, setSentimentAnalysis] = useState([]);
   const [userData, setUserData] = useState([]);
   const [attributesCount, setAttributesCount] = useState([]);
   const [dataAnalysis, setDataAnalysis] = useState([]);
+  const [totalFeedback, setTotalFeedback] = useState(null);
 
   useEffect(() => {
     fetchSentimentAnalysisData();
     fetchUserData();
     fetchAttributesCount();
     fetchDataAnalysis();
+    fetchTotalFeedback();
   }, []);
+
+  const fetchTotalFeedback = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/totalrating");
+      const data = response.data;
+      setTotalFeedback(data);
+    } catch (error) {
+      console.error("Error fetching total feedback:", error);
+    }
+  };
 
   const fetchSentimentAnalysisData = async () => {
     try {
@@ -41,7 +54,9 @@ const Provider = ({ children }) => {
 
   const fetchAttributesCount = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/getattributescount");
+      const response = await axios.get(
+        "http://localhost:8000/getattributescount"
+      );
       const data = response.data;
       setAttributesCount(data);
     } catch (error) {
@@ -65,7 +80,9 @@ const Provider = ({ children }) => {
       <UserContext.Provider value={{ userData }}>
         <AttributesCountContext.Provider value={{ attributesCount }}>
           <DataAnalysisContext.Provider value={{ dataAnalysis }}>
-            {children}
+            <TotalFeedbackContext.Provider value={{ totalFeedback }}>
+              {children}
+            </TotalFeedbackContext.Provider>
           </DataAnalysisContext.Provider>
         </AttributesCountContext.Provider>
       </UserContext.Provider>
@@ -77,6 +94,7 @@ const useSentimentAnalysisContext = () => useContext(SentimentAnalysisContext);
 const useUserContext = () => useContext(UserContext);
 const useAttributesCount = () => useContext(AttributesCountContext);
 const useDataAnalysisContext = () => useContext(DataAnalysisContext);
+const useTotalFeedbackContext = () => useContext(TotalFeedbackContext);
 
 export {
   Provider,
@@ -84,4 +102,5 @@ export {
   useAttributesCount,
   useDataAnalysisContext,
   useSentimentAnalysisContext,
+  useTotalFeedbackContext,
 };
