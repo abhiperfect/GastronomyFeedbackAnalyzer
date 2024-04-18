@@ -19,10 +19,67 @@ import Snackbar from "@mui/material/Snackbar";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import getLPTheme from "./getLPTheme";
+import PropTypes from "prop-types";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 
 const defaultTheme = createTheme();
+function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        width: "100dvw",
+        position: "fixed",
+        bottom: 24,
+      }}
+    >
+      <ToggleButtonGroup
+        color="primary"
+        exclusive
+        value={showCustomTheme}
+        onChange={toggleCustomTheme}
+        aria-label="Platform"
+        sx={{
+          backgroundColor: "background.default",
+          "& .Mui-selected": {
+            pointerEvents: "none",
+          },
+        }}
+      >
+        <ToggleButton value>
+          <AutoAwesomeRoundedIcon sx={{ fontSize: "20px", mr: 1 }} />
+          Custom theme
+        </ToggleButton>
+        <ToggleButton value={false}>Material Design 2</ToggleButton>
+      </ToggleButtonGroup>
+    </Box>
+  );
+}
 
+ToggleCustomTheme.propTypes = {
+  showCustomTheme: PropTypes.shape({
+    valueOf: PropTypes.func.isRequired,
+  }).isRequired,
+  toggleCustomTheme: PropTypes.func.isRequired,
+};
 export default function SignUpPage() {
+  const [mode, setMode] = React.useState("light");
+  const [showCustomTheme, setShowCustomTheme] = React.useState(true);
+  const LPtheme = createTheme(getLPTheme(mode));
+  const defaultTheme = createTheme({ palette: { mode } });
+
+  const toggleColorMode = () => {
+    setMode((prev) => (prev === "dark" ? "light" : "dark"));
+  };
+
+  const toggleCustomTheme = () => {
+    setShowCustomTheme((prev) => !prev);
+  };
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const [userId, setUserId] = useState(null);
@@ -31,9 +88,10 @@ export default function SignUpPage() {
   };
   const notify = () => toast.info("OTP Sent Successfully");
   const notifyCom = (message) => toast.success(message);
-  const notifyError = () => toast.error("Wrong OTP!", {
-    position: toast.POSITION.TOP_LEFT
-  });
+  const notifyError = () =>
+    toast.error("Wrong OTP!", {
+      position: toast.POSITION.TOP_LEFT,
+    });
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -112,15 +170,15 @@ export default function SignUpPage() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Header />
-      <div
+    <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
+      <Header mode={mode} toggleColorMode={toggleColorMode} />
+      {/* <div
         style={{
           backgroundImage: `linear-gradient(180deg, #CEE5FD, #FFF)`, // Background image style
           borderRadius: "10px", // Optional: Add border-radius for a rounded look
           padding: "20px",
         }}
-      >
+      > */}
         <Container component="main" maxWidth="xs" sx={{ mt: 12 }}>
           <CssBaseline />
           <Box
@@ -150,7 +208,7 @@ export default function SignUpPage() {
                 message="User Already Exist"
               />
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={12}>
                   <TextField
                     autoComplete="given-name"
                     name="firstName"
@@ -163,7 +221,7 @@ export default function SignUpPage() {
                     onChange={handleChange}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={12}>
                   <TextField
                     required
                     fullWidth
@@ -271,7 +329,7 @@ export default function SignUpPage() {
           <Box sx={{ mt: 5 }}></Box>
         </Container>
         <Footer />
-      </div>
+      {/* </div> */}
     </ThemeProvider>
   );
 }
