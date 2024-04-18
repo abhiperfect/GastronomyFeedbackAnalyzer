@@ -12,6 +12,9 @@ import Grid from "@mui/material/Grid";
 import FormHelperText from "@mui/material/FormHelperText";
 import { Typography } from "@mui/material";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export default function Feedback({ children }) {
   const [foodQuality, setFoodQuality] = useState("");
   const [cleanliness, setCleanliness] = useState("");
@@ -26,16 +29,24 @@ export default function Feedback({ children }) {
   const [suggestions, setSuggestions] = useState("");
   const [overallSatisfaction, setOverallSatisfaction] = useState("");
   const [city, setCity] = useState("");
-  const [nationality, setNationality] = useState('');
-
+  const [nationality, setNationality] = useState("");
+  const notifyFormSubmit = () => {
+    toast.success("Successfully submitted!", {
+      position: "top-center",
+    });
+  };
+  const notifyError = () =>{
+    toast.error("A Error Occured!", {
+      position: "top-center"
+    });
+  }
   const handleNationalityChange = (event) => {
     setNationality(event.target.value);
   };
 
-
-  const  handleSubmit = async (e) => {
-    
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     const formData = {
       foodQuality,
       cleanliness,
@@ -50,19 +61,41 @@ export default function Feedback({ children }) {
       mealTimes,
       suggestions,
       lengthOfStay,
-      overallSatisfaction
+      overallSatisfaction,
     };
-    
-    console.log(formData);
-    try {
-      const response = await axios.post('http://localhost:8000/submitfeedback');
-      
-    } catch (error) {
-       console.log("Eorro in submiting feedback details", error);
-    }
 
-    // Logic to handle form submission
+    try {
+      // Send the form data to the backend
+      const response = await axios.post(
+        "http://localhost:8000/submit-feedback",
+        formData
+      );
+
+      // Handle success response
+      console.log("Feedback submitted successfully:", response.data);
+      // reset the form fields here
+      setFoodQuality("");
+      setCleanliness("");
+      setMenuVariety("");
+      setStaffFriendliness("");
+      setComments("");
+      setAge("");
+      setGender("");
+      setNationality("");
+      setCity("");
+      setMealPreference("");
+      setMealTimes("");
+      setSuggestions("");
+      setLengthOfStay("");
+      setOverallSatisfaction("");
+      notifyFormSubmit();
+    } catch (error) {
+      // Handle error response
+      console.log("Error submitting feedback:", error);
+      notifyError();
+    }
   };
+
   // Validate ratings to be between 1 and 5
   const isValidRating = (value) => {
     const rating = parseInt(value);

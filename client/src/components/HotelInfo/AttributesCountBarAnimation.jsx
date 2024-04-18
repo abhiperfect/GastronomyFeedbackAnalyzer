@@ -7,9 +7,11 @@ import Checkbox from "@mui/material/Checkbox";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { useAttributesCount } from "../../context/context";
 import { useEffect } from "react";
+import Rating from '@mui/material/Rating';
 
 export default function AttributesCountBarAnimation() {
-  const [seriesNb, setSeriesNb] = React.useState(5);
+  const [value, setValue] = React.useState(2);
+  const [seriesNb, setSeriesNb] = React.useState(3);
   const [itemNb, setItemNb] = React.useState(5);
   const [skipAnimation, setSkipAnimation] = React.useState(false);
   const [replacedLabels, setReplacedLabels] = React.useState([]);
@@ -55,7 +57,13 @@ export default function AttributesCountBarAnimation() {
         xAxis={[
           {
             scaleType: "band",
-            data: ["⭐", "⭐⭐", "⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐⭐⭐"],
+            data: [
+              "⭐", // Render the Rating component directly
+              "⭐⭐",
+              "⭐⭐⭐",
+              "⭐⭐⭐⭐",
+              "⭐⭐⭐⭐⭐"
+            ],
           },
         ]}
         series={replacedLabels
@@ -63,6 +71,7 @@ export default function AttributesCountBarAnimation() {
           .map((s) => ({ ...s, data: s.data.slice(0, itemNb) }))}
         skipAnimation={skipAnimation}
       />
+      <Box sx={{width:'80%', marginLeft:'10%', marginRight:'10%' }}>
       <FormControlLabel
         checked={skipAnimation}
         control={
@@ -95,6 +104,7 @@ export default function AttributesCountBarAnimation() {
         max={5}
         aria-labelledby="input-series-number"
       />
+      </Box>
     </Box>
   );
 }
