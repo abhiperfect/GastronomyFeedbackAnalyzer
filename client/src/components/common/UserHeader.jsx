@@ -149,6 +149,7 @@ function navigateToSignUp(){
                 </MenuItem>
               </Box>
             </Box>
+            <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
             <User/>
           </Toolbar>
         </Container>
