@@ -73,7 +73,6 @@ export default function FeedbackPage() {
   return (
     <HostelInfo>
           <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
-      {/* <Header mode={mode} toggleColorMode={toggleColorMode} /> */}
       <UserHeader mode={mode} toggleColorMode={toggleColorMode}/>
       <TitlebarImageList />
       <HotelDetail />

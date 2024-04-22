@@ -14,7 +14,7 @@ import { Typography } from "@mui/material";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import FoodFeedback from "./FoodFeedback";
 export default function Feedback({ children }) {
   const [foodQuality, setFoodQuality] = useState("");
   const [cleanliness, setCleanliness] = useState("");
@@ -117,23 +117,7 @@ export default function Feedback({ children }) {
             <Grid container spacing={2}>
               {/* Food Quality */}
               <Grid item xs={6}>
-                <TextField
-                  label="Food Quality"
-                  placeholder="Rate from 1 to 5"
-                  value={foodQuality}
-                  onChange={(e) => setFoodQuality(e.target.value)}
-                  fullWidth
-                  required
-                  error={foodQuality && !isValidRating(foodQuality)}
-                  helperText={
-                    foodQuality &&
-                    !isValidRating(foodQuality) &&
-                    "Please enter a rating between 1 and 5"
-                  }
-                  FormHelperTextProps={{
-                    error: !isValidRating(foodQuality),
-                  }}
-                />
+                <FoodFeedback item xs={6}></FoodFeedback>
               </Grid>
               {/* Cleanliness */}
               <Grid item xs={6}>

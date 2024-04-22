@@ -560,7 +560,7 @@ export default function getLPTheme(mode) {
             },
             '& .MuiOutlinedInput-root': {
               boxSizing: 'border-box',
-              minWidth: 280,
+              // minWidth: 280,
               minHeight: 40,
               height: '100%',
               borderRadius: '10px',
@@ -584,7 +584,7 @@ export default function getLPTheme(mode) {
             ...(theme.palette.mode === 'dark' && {
               '& .MuiOutlinedInput-root': {
                 boxSizing: 'border-box',
-                minWidth: 280,
+                // minWidth: 280,
                 minHeight: 40,
                 height: '100%',
                 borderRadius: '10px',
