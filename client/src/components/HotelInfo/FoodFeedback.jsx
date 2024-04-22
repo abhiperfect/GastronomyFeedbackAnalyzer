@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography, Modal, TextField, Grid } from '@mui/material';
-
+import axios from 'axios';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -63,7 +63,17 @@ export default function FoodFeedback() {
     }
     // Handle form submission here
     console.log(feedback);
+    submitFormData();
     handleClose();
+  };
+  const submitFormData = async () => {
+    try {
+      console.log("AAAAAAAAA", feedback);
+      const response = await axios.post('your_api_endpoint_here', feedback);
+      console.log(response.data); // Handle success response
+    } catch (error) {
+      console.error('Error submitting form data:', error.response); // Handle error
+    }
   };
 
   return (
