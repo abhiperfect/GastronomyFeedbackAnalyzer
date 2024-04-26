@@ -7,7 +7,7 @@ import AttributesBarHeading from "./AttributesBarHeading";
 import { Divider } from "@mui/material";
 import BarAnimationTwo from "./BarAnimationTwo";
 import SentimentPieChart from "./SentimentPieChart";
-
+import FoodFeedbackContainer from "./FoodFeedbackContainer";
 export default function FeedbackAnalysis() {
   return (
     <React.Fragment>
@@ -20,6 +20,8 @@ export default function FeedbackAnalysis() {
             <AttributesBarHeading />
           </Box>
           <AttributesCountBarAnimation />
+          <Divider />
+          <FoodFeedbackContainer/>
           <Divider />
           <BarAnimationTwo/>
           <Divider />

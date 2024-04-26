@@ -6,6 +6,7 @@ const UserContext = createContext();
 const AttributesCountContext = createContext();
 const DataAnalysisContext = createContext();
 const TotalFeedbackContext = createContext();
+const FoodFeedbackQualityContext = createContext();
 
 const Provider = ({ children }) => {
   const [sentimentAnalysis, setSentimentAnalysis] = useState([]);
@@ -16,6 +17,7 @@ const Provider = ({ children }) => {
     rating : 0,
     totalFeedback:0
   });
+  const [ foodFeedback,setFoodFeedback] = useState([]); 
 
   useEffect(() => {
     fetchSentimentAnalysisData();
@@ -23,8 +25,18 @@ const Provider = ({ children }) => {
     fetchAttributesCount();
     fetchDataAnalysis();
     fetchTotalFeedback();
+    fetchFoodFeedbackStats();
   }, []);
 
+const fetchFoodFeedbackStats = async () => {
+  try {
+    const response = await axios.get("http://localhost:8000/api/foodqualitystats");
+    const data = response.data.convertedData;
+    setFoodFeedback(data);
+  } catch (error) {
+    console.error("Error fetching Food feedback stats:", error);
+  }
+};
   const fetchTotalFeedback = async () => {
     try {
       const response = await axios.get("http://localhost:8000/totalrating");
@@ -84,7 +96,9 @@ const Provider = ({ children }) => {
         <AttributesCountContext.Provider value={{ attributesCount }}>
           <DataAnalysisContext.Provider value={{ dataAnalysis }}>
             <TotalFeedbackContext.Provider value={{ totalFeedback }}>
+              <FoodFeedbackQualityContext.Provider value={{foodFeedback}}>
               {children}
+              </FoodFeedbackQualityContext.Provider>
             </TotalFeedbackContext.Provider>
           </DataAnalysisContext.Provider>
         </AttributesCountContext.Provider>
@@ -98,7 +112,7 @@ const useUserContext = () => useContext(UserContext);
 const useAttributesCount = () => useContext(AttributesCountContext);
 const useDataAnalysisContext = () => useContext(DataAnalysisContext);
 const useTotalFeedbackContext = () => useContext(TotalFeedbackContext);
-
+const useFoodFeedbackQualityContext = () => useContext(FoodFeedbackQualityContext);
 export {
   Provider,
   useUserContext,
@@ -106,4 +120,5 @@ export {
   useDataAnalysisContext,
   useSentimentAnalysisContext,
   useTotalFeedbackContext,
+  useFoodFeedbackQualityContext,
 };

@@ -32,17 +32,17 @@ export default function FoodFeedback() {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    // Check if the entered value is a number between 1 and 5
-    if (!isNaN(value) && value >= 1 && value <= 5) {
+    // Clear error message when the user starts typing again or deletes the content
+    setFieldErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: '',
+    }));
+    // Check if the entered value is a number between 1 and 5 or empty (allowing backspace)
+    if (value === '' || (!isNaN(value) && value >= 1 && value <= 5)) {
       // Update feedback state if value is valid
       setFeedback((prevFeedback) => ({
         ...prevFeedback,
         [name]: value,
-      }));
-      // Clear error if present
-      setFieldErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: '',
       }));
     } else {
       // Show error if value is not within the valid range
@@ -52,7 +52,7 @@ export default function FoodFeedback() {
       }));
     }
   };
-
+  
   const handleSubmit = () => {
     // Check if any field is empty or has an error
     for (const key in feedback) {
@@ -68,14 +68,13 @@ export default function FoodFeedback() {
   };
   const submitFormData = async () => {
     try {
-      console.log("AAAAAAAAA", feedback);
-      const response = await axios.post('your_api_endpoint_here', feedback);
+      const response = await axios.post('http://localhost:8000/foodfeedback', feedback); // Assuming your server is running on the same domain
       console.log(response.data); // Handle success response
+      // You can perform any additional actions upon successful submission here
     } catch (error) {
       console.error('Error submitting form data:', error.response); // Handle error
     }
   };
-
   return (
     <div>
       <Button onClick={handleOpen} style={{ width: '100%', border: '1px solid #A2A8B0' }}>
