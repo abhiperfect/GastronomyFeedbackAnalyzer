@@ -17,7 +17,8 @@ import sendOtpEmail from "./services/sendOtpEmail.js";
 import bcrypt from 'bcrypt';
 import getOTPByEmail from "./controllers/getOTPByEmail.js";
 import userLogin from "./controllers/userLogin.js";
-
+import foodFeedbackRoute from './middleware/inertFoodFeedback.js'
+import foodqualitystatsRoute from './middleware/foodQualityStats.js'
 const app = express();
 
 // parse application/x-www-form-urlencoded
@@ -27,7 +28,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use("/api", statisticsRoute);
 app.use("/api", sentimentRoute);
-
+app.use("/api",foodqualitystatsRoute);
 app.get("/", (req, res) => {
   res.send("Server is ok");
 });
@@ -38,7 +39,7 @@ app.post("/signup", generateOTPAndSend);
 app.post("/verify-otp", verifyOTP);
 app.post("/submit-feedback", submitFeedback);
 app.post('/login',userLogin);
-
+app.post('/foodfeedback',foodFeedbackRoute);
 
 
 
