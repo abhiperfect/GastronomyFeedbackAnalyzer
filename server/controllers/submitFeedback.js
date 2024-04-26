@@ -1,12 +1,10 @@
-import connectToDatabase from '../db/postgresClient.js'
-
+import connectToDatabase from '../db/postgresClient.js';
 
 const submitFeedback = async (req, res) => {
   const db = connectToDatabase();
   try {
     // Extract feedback data from the request body
     const {
-      foodQuality,
       cleanliness,
       menuVariety,
       staffFriendliness,
@@ -21,6 +19,15 @@ const submitFeedback = async (req, res) => {
       lengthOfStay,
       overallSatisfaction
     } = req.body;
+
+    // Retrieve overall food quality from temp_food_quality table
+    const foodQualityData = await db.query('SELECT overall_food_quality FROM temp_food_quality');
+    const foodQuality = foodQualityData.rows.length > 0 ? foodQualityData.rows[0].overall_food_quality : 0;
+
+    // If temp_food_quality table is not null, delete its contents
+    if (foodQuality !== 0) {
+      await db.query('DELETE FROM temp_food_quality');
+    }
 
     // Insert feedback data into the database
     const query = `
@@ -41,6 +48,7 @@ const submitFeedback = async (req, res) => {
         overall_satisfaction
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
     `;
+
     const values = [
       foodQuality,
       cleanliness,
@@ -57,6 +65,7 @@ const submitFeedback = async (req, res) => {
       lengthOfStay,
       overallSatisfaction
     ];
+
     await db.query(query, values);
 
     res.status(200).json({ success: true, message: 'Feedback submitted successfully.' });
