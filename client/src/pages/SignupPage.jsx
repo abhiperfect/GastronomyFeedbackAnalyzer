@@ -24,7 +24,7 @@ import PropTypes from "prop-types";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
-
+import { useAuth } from "../context/context";
 const defaultTheme = createTheme();
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
@@ -68,6 +68,8 @@ ToggleCustomTheme.propTypes = {
   toggleCustomTheme: PropTypes.func.isRequired,
 };
 export default function SignUpPage() {
+  const { login} = useAuth();
+
   const [mode, setMode] = React.useState("light");
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   const LPtheme = createTheme(getLPTheme(mode));
@@ -88,10 +90,32 @@ export default function SignUpPage() {
   };
   const notify = () => toast.info("OTP Sent Successfully");
   const notifyCom = (message) => toast.success(message);
-  const notifyError = () =>
-    toast.error("Wrong OTP!", {
+  const notifyError = (message) =>
+    toast.error(message, {
       position: toast.POSITION.TOP_LEFT,
     });
+    function notifyInfo(message) {
+      toast.info(message, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000, // Automatically close after 3 seconds
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+    
+    // Function to display a success toast notification
+    function notifySuccess(message) {
+      toast.success(message, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000, // Automatically close after 3 seconds
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -113,6 +137,17 @@ export default function SignUpPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.password ||
+      !formData.phonenumber
+    ) {
+      // Display error toast notification if any field is blank
+      notifyError("All fields are required");
+      return; // Exit the function early if any field is blank
+    }
     try {
       const response = await axios.post("http://localhost:8000/signup", {
         firstName: formData.firstName,
@@ -145,12 +180,23 @@ export default function SignUpPage() {
         userId: userId,
         otp: formData.otp,
       });
-      console.log(response.data); // Assuming the server responds with some data
-      console.log(response.data.success);
-      notifyCom(response.data.message);
-
-      // If OTP is verified, proceed to the next page
-      if (response.data.success) {
+  
+  
+      // Display a toast notification
+      if (!response.data.success) {
+        // If OTP verification failed
+        notifyError(response.data.message);
+      } else if (response.data.exists) {
+        // If user already exists
+        notifyInfo("User already exists");
+      } else {
+        
+        // Save the token securely
+      const token = response.data.token;
+      login(response.data.userData, token);
+        // If OTP is verified successfully, proceed to the next page
+        
+        notifySuccess(response.data.message);
         navigate("/hotellist", {
           state: {
             // phoneNumber,
@@ -158,8 +204,9 @@ export default function SignUpPage() {
         });
       }
     } catch (error) {
-      notifyError();
-      console.error("Error verifying OTP:", error);
+
+      // Handle error, show toast notification if needed
+      notifyError("Failed to verify OTP");
     }
   };
 

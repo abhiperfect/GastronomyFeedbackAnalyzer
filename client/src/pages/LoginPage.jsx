@@ -21,6 +21,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 import getLPTheme from "./getLPTheme";
+import { useAuth } from "../context/context";
 const defaultTheme = createTheme();
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
@@ -64,6 +65,8 @@ ToggleCustomTheme.propTypes = {
   toggleCustomTheme: PropTypes.func.isRequired,
 };
 export default function LoginPage() {
+  const { login} = useAuth();
+
   const [mode, setMode] = React.useState("light");
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   const LPtheme = createTheme(getLPTheme(mode));
@@ -92,6 +95,10 @@ export default function LoginPage() {
 
       if (response.data.success) {
         // Redirect to the desired page upon successful login
+                // Save the token securely
+      const token = response.data.token;
+      login(response.data.userData, token);
+      
         navigate("/hotellist", {
           state: {
             // phoneNumber,
