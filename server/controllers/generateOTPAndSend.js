@@ -2,7 +2,34 @@ import generateOTP from "../utils/otpGenerator.js";
 import { insertUserIntoTempDatabase } from "./insertUserIntoTempDatabase.js";
 import generateUniqueId from "generate-unique-id";
 import sendOtpEmail from "../services/sendOtpEmail.js";
-// Import your utility functions
+import express from 'express';
+import nodemailer from 'nodemailer';
+import { config } from 'dotenv';
+config();
+
+const app = express();
+
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: process.env.EMAIL_USERNAME, // Gmail address
+    pass: process.env.EMAIL_PASSWORD, // Gmail password
+  },
+});
+
+const mailOptions = {
+  from: '"Abhishek" abhishekprajapati.890e@gmail.com',
+  to: 'johnsondwayne1972dj@gmail.com',
+  subject: 'Hello ✔',
+  text: 'Hello world?',
+  html: '<b>Hello world?</b>',
+};
+
+
+
+
 
 // Define the async function
 export async function generateOTPAndSend(req, res) {
@@ -16,6 +43,8 @@ export async function generateOTPAndSend(req, res) {
     // Generate a 6-digit OTP
     const otp = generateOTP();
     // const emailSent = await sendOtpEmail(email, otp);
+    // const info = await transporter.sendMail(mailOptions);
+    // console.log(`Message sent: ${info.messageId}`);
     const dataInsertingSuccefully = insertUserIntoTempDatabase(
       userId,
       firstName,
@@ -25,7 +54,7 @@ export async function generateOTPAndSend(req, res) {
       password,
       otp
     );
-
+    console.log(otp);
     // Send the OTP to the user (implementation omitted for brevity)
 
     if (dataInsertingSuccefully) {

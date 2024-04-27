@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import getOTPByEmail from "./getOTPByEmail.js";
+import jwt from 'jsonwebtoken';
 
 const userLogin = async (req, res) => {
   const { email, password } = req.body;
@@ -14,8 +15,10 @@ const userLogin = async (req, res) => {
       // Compare the provided password with the hashed password from the database
       const passwordMatch = await bcrypt.compare(password, hashedPassword);
 
+      const token = jwt.sign({ userId: result.rows[0].user_id }, 'your_jwt_secret', { expiresIn: '1h' }); 
+      // OTP is verified successfully, send success response
       if (passwordMatch) {
-        res.status(200).json({ success: true, message: "Login successful" });
+        res.status(200).json({ success: true, message: "Login successful",userData: result , token:token});
       } else {
         res.status(401).json({ success: false, message: "Incorrect password" });
       }

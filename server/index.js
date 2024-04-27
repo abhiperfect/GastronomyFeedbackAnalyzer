@@ -35,11 +35,13 @@ app.get("/", (req, res) => {
 
 app.get("/totalrating", calculateTotalRating);
 app.get("/getattributescount", attributesCountsOfQuantData);
-app.post("/signup", generateOTPAndSend);
-app.post("/verify-otp", verifyOTP);
 app.post("/submit-feedback", submitFeedback);
-app.post('/login',userLogin);
 app.post('/foodfeedback',foodFeedbackRoute);
+
+
+app.post("/verify-otp", verifyOTP);
+app.post("/signup", generateOTPAndSend);
+app.post('/login',userLogin);
 
 
 
