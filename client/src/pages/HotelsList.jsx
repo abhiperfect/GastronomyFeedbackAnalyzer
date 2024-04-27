@@ -11,8 +11,9 @@ import Footer from "../components/common/Footer.jsx";
 import { Typography } from "@mui/material";
 import ListHero from "../components/Hostel/ListHero.jsx";
 import UserHeader from "../components/common/UserHeader.jsx";
-
-
+import { useAuth } from "../context/context.js";
+import { useNavigate } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -22,6 +23,37 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function HotelsList() {
+  const {isAuthenticated} = useAuth();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = React.useState(true);
+  
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    // Simulate async authentication check
+    const checkAuthentication = async () => {
+      const storedToken = localStorage.getItem("token");
+      // Your authentication check logic here...
+      // For demonstration purposes, we're using a setTimeout to simulate an asynchronous operation
+      setTimeout(() => {
+        setIsLoading(false);
+        if (!storedToken) {
+          navigate('/login');
+        }
+      }, 2000); // Simulating a 2-second delay
+    };
+
+    checkAuthentication();
+  }, [isAuthenticated, navigate]);
+
+  if (isLoading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <CircularProgress />
+      </div>
+    );
+  }
+
   return (
     <React.Fragment>
       <CssBaseline />
