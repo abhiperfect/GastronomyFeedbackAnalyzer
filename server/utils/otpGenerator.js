@@ -1,6 +1,6 @@
-import otpGenerator from 'otp-generator';
-
-// Function to generate a 6-digit numeric OTP 
+// Function to generate a 6-digit numerical OTP using Math.random()
 export default function generateOTP() {
-  return otpGenerator.generate(6, { digits: true, alphabets: false, upperCase: false, specialChars: false });
+  // Generate a random number between 100000 and 999999 (inclusive)
+  const otp = Math.floor(100000 + Math.random() * 900000);
+  return otp.toString(); // Convert the number to a string
 }
