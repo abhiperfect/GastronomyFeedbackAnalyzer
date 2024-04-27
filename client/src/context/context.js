@@ -7,6 +7,9 @@ const AttributesCountContext = createContext();
 const DataAnalysisContext = createContext();
 const TotalFeedbackContext = createContext();
 const FoodFeedbackQualityContext = createContext();
+const AuthContext = createContext();
+
+
 
 const Provider = ({ children }) => {
   const [sentimentAnalysis, setSentimentAnalysis] = useState([]);
@@ -18,6 +21,8 @@ const Provider = ({ children }) => {
     totalFeedback:0
   });
   const [ foodFeedback,setFoodFeedback] = useState([]); 
+  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     fetchSentimentAnalysisData();
@@ -26,7 +31,43 @@ const Provider = ({ children }) => {
     fetchDataAnalysis();
     fetchTotalFeedback();
     fetchFoodFeedbackStats();
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+      setIsAuthenticated(true);
+    }
   }, []);
+  useEffect(() => {
+    // Check if there's a token stored in local storage
+    const storedToken = localStorage.getItem("token");
+  
+    if (storedToken) {
+      // If there's a token, set the initial authentication state
+      setUser(JSON.parse(localStorage.getItem("user")));
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const login = (userData, token) => {
+    console.log("login: I got call", token);
+    // Remove past user data and token
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+  
+    setUser(userData);
+    setIsAuthenticated(true);
+    // You can also store user data in localStorage for persistent login
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", token);
+  };
+  
+  const logout = () => {
+    setUser(null);
+    setIsAuthenticated(false);
+    // Remove stored user data and token
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+  };
 
 const fetchFoodFeedbackStats = async () => {
   try {
@@ -97,7 +138,9 @@ const fetchFoodFeedbackStats = async () => {
           <DataAnalysisContext.Provider value={{ dataAnalysis }}>
             <TotalFeedbackContext.Provider value={{ totalFeedback }}>
               <FoodFeedbackQualityContext.Provider value={{foodFeedback}}>
+              <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
               {children}
+              </AuthContext.Provider>
               </FoodFeedbackQualityContext.Provider>
             </TotalFeedbackContext.Provider>
           </DataAnalysisContext.Provider>
@@ -113,6 +156,8 @@ const useAttributesCount = () => useContext(AttributesCountContext);
 const useDataAnalysisContext = () => useContext(DataAnalysisContext);
 const useTotalFeedbackContext = () => useContext(TotalFeedbackContext);
 const useFoodFeedbackQualityContext = () => useContext(FoodFeedbackQualityContext);
+const useAuth = () => useContext(AuthContext);
+
 export {
   Provider,
   useUserContext,
@@ -121,4 +166,5 @@ export {
   useSentimentAnalysisContext,
   useTotalFeedbackContext,
   useFoodFeedbackQualityContext,
+ useAuth
 };
