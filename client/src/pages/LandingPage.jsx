@@ -82,7 +82,9 @@ export default function LandingPage() {
        mode={mode} toggleColorMode={toggleColorMode} 
       />
       <Hero />
-      <Box sx={{ bgcolor: 'background.default' }}>
+      <Box sx={{ 
+        bgcolor: 'background.default' 
+    }}>
         <LogoCollection />
         <Features />
         <Divider />

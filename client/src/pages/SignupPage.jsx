@@ -26,6 +26,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 import { useAuth } from "../context/context";
 import { useSetMode } from '../context/context.js';
+import { alpha } from "@mui/material";
 const defaultTheme = createTheme();
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
@@ -219,18 +220,21 @@ export default function SignUpPage() {
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
       <Header mode={mode} toggleColorMode={toggleColorMode} />
-      {/* <div
-        style={{
-          backgroundImage: `linear-gradient(180deg, #CEE5FD, #FFF)`, // Background image style
-          borderRadius: "10px", // Optional: Add border-radius for a rounded look
-          padding: "20px",
-        }}
-      > */}
-        <Container component="main" maxWidth="xs" sx={{ mt: 12 }}>
+      <Box
+        sx={(theme)=>({
+              backgroundImage:
+              theme.palette.mode === "light"
+                ? "linear-gradient(180deg, #CEE5FD, #FFF)"
+                : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
+        })}
+      >
+        <Container component="main" maxWidth="xs" sx={{ mt:0,
+        paddingTop:'120px'
+        
+        }}>
           <CssBaseline />
           <Box
             sx={{
-              marginTop: 8,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -380,6 +384,7 @@ export default function SignUpPage() {
         showCustomTheme={showCustomTheme}
         toggleCustomTheme={toggleCustomTheme}
       />
+      </Box>
     </ThemeProvider>
   );
 }

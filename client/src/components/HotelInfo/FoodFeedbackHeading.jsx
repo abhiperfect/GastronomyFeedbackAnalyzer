@@ -13,6 +13,7 @@ export default function FoodFeedbackHeading() {
           alignSelf: "center",
           textAlign: "center",
           fontSize: "clamp(2rem, 5vw, 1rem)",
+          marginTop:'50px'
         }}
       >
         Food Quality Analysis

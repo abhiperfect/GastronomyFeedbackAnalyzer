@@ -20,6 +20,7 @@ import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import getLPTheme from './getLPTheme';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useSetMode } from '../context/context.js';
+import { alpha } from "@mui/material";
 
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
@@ -132,7 +133,7 @@ export default function HotelsList() {
         }}
       >
         <Box
-          sx={{
+          sx={(theme)=>({
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -140,7 +141,11 @@ export default function HotelsList() {
             textAlign: "center",
             pt: 14, // Add padding top
             maxWidth: "100vp",
-          }}
+            backgroundImage:
+            theme.palette.mode === "light"
+              ? "linear-gradient(180deg, #CEE5FD, #FFF)"
+              : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
+          })}
         >
           <ListHero />
         </Box>

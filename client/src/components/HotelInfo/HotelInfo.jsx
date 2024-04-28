@@ -10,7 +10,7 @@ export default function HostelInfo({children}) {
       <Container maxWidth='false' 
       style={{padding:'0',
       // backgroundImage: `linear-gradient(180deg, #CEE5FD, #FFF)`,
-      paddingTop:'100px'
+      // paddingTop:'100px'
     }}
     >
         <Box sx={{ bgcolor: 'inherit', height: '100vh' }} >

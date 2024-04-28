@@ -5,12 +5,20 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import ListSubheader from '@mui/material/ListSubheader';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
+import { Box } from '@mui/material';
 
 export default function TitlebarImageList() {
   return (
+    <Box
+    style={{
+      paddingTop:'100px'
+    }}
+    >
     <ImageList 
     id='home'
-    sx={{ width: '100%', height: 450 }}>
+    sx={{ width: '100%', height: 450,
+     margin:'0',
+    }}>
       <ImageListItem key="Subheader" cols={8}>
         {/* <ListSubheader component="div">December</ListSubheader> */}
       </ImageListItem>
@@ -37,6 +45,7 @@ export default function TitlebarImageList() {
         </ImageListItem>
       ))}
     </ImageList>
+    </Box>
   );
 }
 

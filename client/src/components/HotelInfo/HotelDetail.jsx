@@ -9,17 +9,24 @@ export default function HotelDetail() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Container 
-      maxWidth="false" 
-      style={{paddingLeft:'10%', paddingRight:'10%', paddingBottom:'50px'}}
+      <Container
+        maxWidth="false"
+        style={{
+          paddingLeft: "10%",
+          paddingRight: "10%",
+          paddingBottom: "50px",
+        }}
       >
-        <Box sx={{ bgcolor: "", height: "20vh" }}>
-          <Box sx={{ display:'flex', justifyContent:'space-between'}}>
+        <Box sx={{ bgcolor: "", height: "80vh" }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between",
+         marginTop:'20px',
+         marginBottom:'20px'
+        }}>
             <Heading />
             <RatingPaper />
           </Box>
+        <Gmap />
         </Box>
-             <Gmap/>
       </Container>
     </React.Fragment>
   );

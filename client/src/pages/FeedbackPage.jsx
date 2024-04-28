@@ -19,7 +19,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useAuth } from "../context/context.js";
 import { useNavigate } from 'react-router-dom';
 import { useSetMode } from '../context/context.js';
-
+import { alpha } from "@mui/material";
 const defaultTheme = createTheme();
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
@@ -109,6 +109,14 @@ export default function FeedbackPage() {
       <UserHeader 
        userheader={true}
       mode={mode} toggleColorMode={toggleColorMode}/>
+      <Box
+        sx={(theme)=>({
+          backgroundImage:
+          theme.palette.mode === "light"
+            ? "linear-gradient(180deg, #CEE5FD, #FFF)"
+            : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
+        })}
+      >
       <TitlebarImageList />
       <HotelDetail />
       <Divider />
@@ -121,6 +129,7 @@ export default function FeedbackPage() {
         showCustomTheme={showCustomTheme}
         toggleCustomTheme={toggleCustomTheme}
       />
+      </Box>
       </ThemeProvider>
     </HostelInfo>
   );

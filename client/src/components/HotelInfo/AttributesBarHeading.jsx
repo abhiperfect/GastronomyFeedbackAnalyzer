@@ -13,6 +13,7 @@ export default function AttributesBarHeading() {
           alignSelf: "center",
           textAlign: "center",
           fontSize: "clamp(2rem, 5vw, 1rem)",
+          marginTop:'50px'
         }}
       >
         Explore Customer Satisfaction Across Key Attributes

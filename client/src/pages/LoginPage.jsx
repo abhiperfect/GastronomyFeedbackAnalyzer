@@ -23,6 +23,7 @@ import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 import getLPTheme from "./getLPTheme";
 import { useAuth } from "../context/context";
 import { useSetMode } from '../context/context.js';
+import { alpha } from "@mui/material";
 const defaultTheme = createTheme();
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
@@ -118,6 +119,7 @@ export default function LoginPage() {
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
         <Header mode={mode} toggleColorMode={toggleColorMode} />
+
         <Grid
           item
           xs={false}
@@ -136,13 +138,15 @@ export default function LoginPage() {
           }}
         />
         <Box
-          sx={{
+          sx={(theme)=>({
             position: "absolute",
             width: "100%",
             height: "100%",
-            // backgroundImage:
-            //   "linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,1))",
-          }}
+            backgroundImage:
+            theme.palette.mode === "light"
+              ? "linear-gradient(180deg, #CEE5FD, #FFF)"
+              : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
+          })}
         />
         <Grid
           item
