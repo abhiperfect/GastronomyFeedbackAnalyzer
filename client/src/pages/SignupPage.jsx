@@ -53,9 +53,9 @@ function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
       >
         <ToggleButton value>
           <AutoAwesomeRoundedIcon sx={{ fontSize: "20px", mr: 1 }} />
-          Custom theme
+          Custom theme 1
         </ToggleButton>
-        <ToggleButton value={false}>Material Design 2</ToggleButton>
+        <ToggleButton value={false}>Custom theme 2</ToggleButton>
       </ToggleButtonGroup>
     </Box>
   );
@@ -376,7 +376,10 @@ export default function SignUpPage() {
           <Box sx={{ mt: 5 }}></Box>
         </Container>
         <Footer />
-      {/* </div> */}
+        <ToggleCustomTheme
+        showCustomTheme={showCustomTheme}
+        toggleCustomTheme={toggleCustomTheme}
+      />
     </ThemeProvider>
   );
 }

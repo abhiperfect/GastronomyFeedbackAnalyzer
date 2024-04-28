@@ -50,9 +50,9 @@ function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
       >
         <ToggleButton value>
           <AutoAwesomeRoundedIcon sx={{ fontSize: "20px", mr: 1 }} />
-          Custom theme
+          Custom theme 1
         </ToggleButton>
-        <ToggleButton value={false}>Material Design 2</ToggleButton>
+        <ToggleButton value={false}>Custom theme 2</ToggleButton>
       </ToggleButtonGroup>
     </Box>
   );
@@ -230,6 +230,10 @@ export default function LoginPage() {
         </Grid>
       </Grid>
       <Footer />
+      <ToggleCustomTheme
+        showCustomTheme={showCustomTheme}
+        toggleCustomTheme={toggleCustomTheme}
+      />
     </ThemeProvider>
   );
 }

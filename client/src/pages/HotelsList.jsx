@@ -14,6 +14,53 @@ import UserHeader from "../components/common/UserHeader.jsx";
 import { useAuth } from "../context/context.js";
 import { useNavigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
+import getLPTheme from './getLPTheme';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
+function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '100dvw',
+        position: 'fixed',
+        bottom: 24,
+      }}
+    >
+      <ToggleButtonGroup
+        color="primary"
+        exclusive
+        value={showCustomTheme}
+        onChange={toggleCustomTheme}
+        aria-label="Platform"
+        sx={{
+          backgroundColor: 'background.default',
+          '& .Mui-selected': {
+            pointerEvents: 'none',
+          },
+        }}
+      >
+        <ToggleButton value>
+          <AutoAwesomeRoundedIcon sx={{ fontSize: '20px', mr: 1 }} />
+          Custom theme 1
+        </ToggleButton>
+        <ToggleButton value={false}>Custom theme 2</ToggleButton>
+      </ToggleButtonGroup>
+    </Box>
+  );
+}
+
+// ToggleCustomTheme.propTypes = {
+//   showCustomTheme: PropTypes.shape({
+//     valueOf: PropTypes.func.isRequired,
+//   }).isRequired,
+//   toggleCustomTheme: PropTypes.func.isRequired,
+// };
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -22,11 +69,25 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
+
 export default function HotelsList() {
   const {isAuthenticated} = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = React.useState(true);
-  
+  const [mode, setMode] = React.useState('light');
+  const [showCustomTheme, setShowCustomTheme] = React.useState(true);
+  const LPtheme = createTheme(getLPTheme(mode));
+  const defaultTheme = createTheme({ palette: { mode } });
+
+  const toggleColorMode = () => {
+    // setMode('dark');
+    setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
+  const toggleCustomTheme = () => {
+    setShowCustomTheme((prev) => !prev);
+  };
+
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -55,14 +116,17 @@ export default function HotelsList() {
   }
 
   return (
+    <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
     <React.Fragment>
       <CssBaseline />
-      <UserHeader />
+      <UserHeader 
+      mode={mode} toggleColorMode={toggleColorMode}
+      />
       <Container
         maxWidth="false"
         style={{
           padding: "0",
-          backgroundImage: `linear-gradient(180deg, #CEE5FD, #FFF)`, // Background image style
+          // backgroundImage: `linear-gradient(180deg, #CEE5FD, #FFF)`, // Background image style
           mt: 10,
         }}
       >
@@ -111,7 +175,12 @@ export default function HotelsList() {
           </Box>
           <Footer />
         </Box>
+        <ToggleCustomTheme
+        showCustomTheme={showCustomTheme}
+        toggleCustomTheme={toggleCustomTheme}
+      />
       </Container>
     </React.Fragment>
+    </ThemeProvider>
   );
 }

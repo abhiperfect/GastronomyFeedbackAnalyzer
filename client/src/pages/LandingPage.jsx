@@ -46,9 +46,9 @@ function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
       >
         <ToggleButton value>
           <AutoAwesomeRoundedIcon sx={{ fontSize: '20px', mr: 1 }} />
-          Custom theme
+          Custom theme 1
         </ToggleButton>
-        <ToggleButton value={false}>Material Design 2</ToggleButton>
+        <ToggleButton value={false}>Custom theme 2</ToggleButton>
       </ToggleButtonGroup>
     </Box>
   );
@@ -68,7 +68,8 @@ export default function LandingPage() {
   const defaultTheme = createTheme({ palette: { mode } });
 
   const toggleColorMode = () => {
-    setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
+    setMode('dark');
+    // setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
   const toggleCustomTheme = () => {
@@ -78,7 +79,9 @@ export default function LandingPage() {
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
       <CssBaseline />
-      <Header mode={mode} toggleColorMode={toggleColorMode} />
+      <Header
+       mode={mode} toggleColorMode={toggleColorMode} 
+      />
       <Hero />
       <Box sx={{ bgcolor: 'background.default' }}>
         <LogoCollection />
@@ -88,16 +91,16 @@ export default function LandingPage() {
         <Divider />
         <Highlights />
         <Divider />
-        <Pricing />
-        <Divider />
+        {/* <Pricing />
+        <Divider /> */}
         <FAQ />
         <Divider />
         <Footer />
       </Box>
-      {/* <ToggleCustomTheme
+      <ToggleCustomTheme
         showCustomTheme={showCustomTheme}
         toggleCustomTheme={toggleCustomTheme}
-      /> */}
+      />
     </ThemeProvider>
   );
 }
