@@ -13,9 +13,10 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import LogoutButton from "../common/LogoutButton";
+import Profile from "../common/Profile";
 
 export default function User() {
-  const settings = ["Profile", "Account", "Dashboard", <LogoutButton/>];
+  const settings = [<Profile/>, <LogoutButton/>];
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
