@@ -18,7 +18,8 @@ const userLogin = async (req, res) => {
       const token = jwt.sign({ userId: result.rows[0].user_id }, 'your_jwt_secret', { expiresIn: '1h' }); 
       // OTP is verified successfully, send success response
       if (passwordMatch) {
-        res.status(200).json({ success: true, message: "Login successful",userData: result , token:token});
+        console.log( result.rows);
+        res.status(200).json({ success: true, message: "Login successful",userData: result.rows , token:token});
       } else {
         res.status(401).json({ success: false, message: "Incorrect password" });
       }

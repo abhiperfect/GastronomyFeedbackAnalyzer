@@ -11,7 +11,8 @@ import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import ProfileBottomBar from "./ProfileBottomBar";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useAuth } from "../../context/context";
 
 const Fade = React.forwardRef(function Fade(props, ref) {
   const {
@@ -69,15 +70,20 @@ const style = {
 };
 
 export default function Profile() {
+  const { user } = useAuth();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <div>
-      <Button onClick={handleOpen} variant="outlined" startIcon={<AccountCircleIcon />}>
-  Profile
-</Button>
+      <Button
+        onClick={handleOpen}
+        variant="outlined"
+        startIcon={<AccountCircleIcon />}
+      >
+        Profile
+      </Button>
       <Modal
         aria-labelledby="spring-modal-title"
         aria-describedby="spring-modal-description"
@@ -93,81 +99,88 @@ export default function Profile() {
       >
         <Fade in={open}>
           <Box sx={style}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+            {user && user.length > 0 && (
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  // height: "100%",
-                }}
-              >
-                <div>
-                  <ProfilePhoto name={"Abhishek Prajapati"} />
-                </div>
-              </Box>
-              <Typography variant="h6" gutterBottom>
-                Abhishek Prajapati
-              </Typography>
-              <Typography variant="subtitle1" gutterBottom>
-                <Typography className="text-muted mb-4">
-                  @Programmer <span className="mx-2">|</span>
-                  <a href="#!">mdbootstrap.com</a>
-                </Typography>
-              </Typography>
-              <Typography variant="subtitle1" gutterBottom>
-                <Typography className="text-muted mb-4">
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: "100%",
-                    }}
-                  >
-                    <div>
-                      <FacebookOutlinedIcon
-                        style={{ fontSize: 40, cursor: "pointer" }}
-                      />
-                      <TwitterIcon
-                        style={{ fontSize: 40, cursor: "pointer" }}
-                      />
-                      <InstagramIcon
-                        style={{ fontSize: 40, cursor: "pointer" }}
-                      />
-                    </div>
-                  </Box>
-                </Typography>
-              </Typography>
-              <div
-                style={{
-                  height: "150px",
-                  display: "flex",
+                  flexDirection: "column",
                   justifyContent: "center",
                   alignItems: "center",
                 }}
               >
-                <Button
-                  variant="outlined"
-                  size="large"
+                <Box
                   sx={{
-                    fontSize: "1.0rem",
-                    paddingY: "1rem",
-                    paddingX: "2rem",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
                 >
-                  Look Your Feedbacks
-                </Button>
-              </div>
-            </Box>
-            <ProfileBottomBar/>
+                  <div>
+                    <ProfilePhoto name={user[0].first_name} />
+                  </div>
+                </Box>
+                <Typography variant="h6" gutterBottom>
+                  {user[0].first_name} {user[0].last_name}
+                </Typography>
+                <div style={{ display:'flex',
+                 flexDirection:'column',
+                 justifyContent:'center',
+                 alignContent:'center'
+                }}>
+                  <Typography variant="subtitle1" gutterBottom>
+                    <Typography className="text-muted mb-4">
+                     @User <span className="mx-2">|</span>
+                      <a href="#!"> {user[0].email}</a>
+                    </Typography>
+                  </Typography>
+                </div>
+                <Typography variant="subtitle1" gutterBottom>
+                  <Typography className="text-muted mb-4">
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "100%",
+                      }}
+                    >
+                      <div>
+                        <FacebookOutlinedIcon
+                          style={{ fontSize: 40, cursor: "pointer" }}
+                        />
+                        <TwitterIcon
+                          style={{ fontSize: 40, cursor: "pointer" }}
+                        />
+                        <InstagramIcon
+                          style={{ fontSize: 40, cursor: "pointer" }}
+                        />
+                      </div>
+                    </Box>
+                  </Typography>
+                </Typography>
+                <div
+                  style={{
+                    height: "150px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    sx={{
+                      fontSize: "1.0rem",
+                      paddingY: "1rem",
+                      paddingX: "2rem",
+                    }}
+                  >
+                    Look Your Feedbacks
+                  </Button>
+                </div>
+              </Box>
+            )}
+            <ProfileBottomBar />
           </Box>
         </Fade>
       </Modal>
