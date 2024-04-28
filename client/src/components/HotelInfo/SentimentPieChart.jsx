@@ -8,7 +8,9 @@ export default function SentimentPieChart() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Container maxWidth="false">
+      <Container 
+      id='sentiment'
+      maxWidth="false">
         <Box
           sx={{
             bgcolor: "",

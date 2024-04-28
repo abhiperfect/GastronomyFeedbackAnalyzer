@@ -12,7 +12,9 @@ export default function FeedbackAnalysis() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Container maxWidth="false" style={{}}>
+      <Container 
+      id='explore'
+      maxWidth="false" style={{}}>
         <Box sx={{ bgcolor: "", height:'',}}>
           <Box
             sx={{ display: "flex", justifyContent: "center", margin: "20px" }}

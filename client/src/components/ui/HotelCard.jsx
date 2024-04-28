@@ -15,7 +15,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from "react-router-dom";
-
+import CardLoading from './CardLoading';
 const ExpandMore = styled((props) => {
   
   const { expand, ...other } = props;
@@ -31,6 +31,7 @@ const ExpandMore = styled((props) => {
 export default function HotelCard() {
   const navigate = useNavigate();
   const [expanded, setExpanded] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true); // New state for loading
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -42,7 +43,19 @@ const handleCardClick = () =>{
     },
   });    
 };
+  // Simulating loading delay
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000); // Adjust the delay time as needed
 
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Render loader if still loading
+  if (isLoading) {
+    return <div><CardLoading/></div>;
+  }
   return (
     <Card sx={{ maxWidth: 345, margin:'20px' }}
     style={{ cursor:'pointer'}}

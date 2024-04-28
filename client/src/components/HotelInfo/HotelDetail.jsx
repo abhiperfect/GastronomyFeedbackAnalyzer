@@ -9,7 +9,8 @@ export default function HotelDetail() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Container maxWidth="false" 
+      <Container 
+      maxWidth="false" 
       style={{paddingLeft:'10%', paddingRight:'10%', paddingBottom:'50px'}}
       >
         <Box sx={{ bgcolor: "", height: "20vh" }}>

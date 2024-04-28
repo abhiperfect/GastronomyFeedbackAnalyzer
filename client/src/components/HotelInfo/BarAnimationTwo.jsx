@@ -9,7 +9,9 @@ export default function BarAnimation() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Container maxWidth="lg">
+      <Container
+      id='customers' 
+      maxWidth="lg">
         <Box
           sx={{
                
