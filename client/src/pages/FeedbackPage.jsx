@@ -18,6 +18,7 @@ import Header from "../components/common/Header";
 import CircularProgress from '@mui/material/CircularProgress';
 import { useAuth } from "../context/context.js";
 import { useNavigate } from 'react-router-dom';
+import { useSetMode } from '../context/context.js';
 
 const defaultTheme = createTheme();
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
@@ -62,7 +63,7 @@ ToggleCustomTheme.propTypes = {
   toggleCustomTheme: PropTypes.func.isRequired,
 };
 export default function FeedbackPage() {
-  const [mode, setMode] = React.useState("light");
+  const { mode, setMode } = useSetMode();
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   const LPtheme = createTheme(getLPTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });

@@ -19,6 +19,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import getLPTheme from './getLPTheme';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { useSetMode } from '../context/context.js';
 
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
@@ -71,10 +72,10 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 export default function HotelsList() {
+  const { mode, setMode } = useSetMode();
   const {isAuthenticated} = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = React.useState(true);
-  const [mode, setMode] = React.useState('light');
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   const LPtheme = createTheme(getLPTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });

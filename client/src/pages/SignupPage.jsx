@@ -25,6 +25,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 import { useAuth } from "../context/context";
+import { useSetMode } from '../context/context.js';
 const defaultTheme = createTheme();
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
@@ -69,8 +70,7 @@ ToggleCustomTheme.propTypes = {
 };
 export default function SignUpPage() {
   const { login} = useAuth();
-
-  const [mode, setMode] = React.useState("light");
+  const { mode, setMode } = useSetMode();
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   const LPtheme = createTheme(getLPTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });

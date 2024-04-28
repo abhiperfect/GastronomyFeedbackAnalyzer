@@ -18,7 +18,7 @@ import Testimonials from '../components/Home/Testimonials.jsx';
 import FAQ from '../components/Home/FAQ.jsx';
 import Footer from '../components/common/Footer.jsx';
 import getLPTheme from './getLPTheme';
-
+import { useSetMode } from '../context/context.js';
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
     <Box
@@ -62,14 +62,13 @@ ToggleCustomTheme.propTypes = {
 };
 
 export default function LandingPage() {
-  const [mode, setMode] = React.useState('light');
+  const { mode, setMode } = useSetMode();
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   const LPtheme = createTheme(getLPTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });
 
   const toggleColorMode = () => {
-    setMode('dark');
-    // setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
+    setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
   const toggleCustomTheme = () => {
