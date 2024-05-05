@@ -11,7 +11,7 @@ const getHostelList = async (req, res) => {
     const result = await db.query(query);
 
     console.log("FETCHED HOSTEL LIST FROM DB");
-    res.status(200).json(result.rows);
+    res.status(200).json({data: result.rows});
   } catch (error) {
     console.error("Error:", error);
     res
