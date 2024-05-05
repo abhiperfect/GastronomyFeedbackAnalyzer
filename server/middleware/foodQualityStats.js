@@ -74,8 +74,7 @@ app.get("/foodqualitystats", async (req, res) => {
       })
     );
 
-    // Log or return the coefficient of variances for each column
-    console.log("Coefficient of Variances (Percentage):", convertedData);
+    console.log("ROUTE 1: FETCHED DATA SUCCESSFULLY");
     res.status(200).json({ convertedData });
   } catch (error) {
     console.error("Error:", error);
