@@ -22,8 +22,10 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 import getLPTheme from "./getLPTheme";
 import { useAuth } from "../context/context";
-import { useSetMode } from '../context/context.js';
+import { useSetMode } from "../context/context.js";
 import { alpha } from "@mui/material";
+import { toast } from "react-toastify";
+
 const defaultTheme = createTheme();
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
@@ -67,11 +69,15 @@ ToggleCustomTheme.propTypes = {
   toggleCustomTheme: PropTypes.func.isRequired,
 };
 export default function LoginPage() {
-  const { login} = useAuth();
+  const { login } = useAuth();
   const { mode, setMode } = useSetMode();
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   const LPtheme = createTheme(getLPTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });
+  const notifyError = (message) =>
+    toast.error(message, {
+      position: toast.POSITION.TOP_LEFT,
+    });
 
   const toggleColorMode = () => {
     setMode((prev) => (prev === "dark" ? "light" : "dark"));
@@ -82,6 +88,7 @@ export default function LoginPage() {
   };
 
   const navigate = useNavigate();
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -94,25 +101,39 @@ export default function LoginPage() {
         password,
       });
 
-      if (response.data.success) {
-        // Redirect to the desired page upon successful login
-                // Save the token securely
-      const token = response.data.token;
-      login(response.data.userData, token);
-      
-        navigate("/hotellist", {
-          state: {
-            // phoneNumber,
-          },
-        });
+      if (response.status === 200) {
+        const responseData = response.data;
+        if (responseData.success) {
+          const token = response.data.token;
+          login(response.data.userData, token);
+          navigate("/hotellist");
+          // Display success toast
+          toast.success(responseData.message);
+        } else {
+          // Display error toast with the appropriate message
+          const errorMessage =
+            responseData.message || "User password incorrect.";
+          toast.error(errorMessage);
+        }
       } else {
-        alert(response.data.message); // Show error message if login fails
+        // Handle other status codes
+        if (response.status === 401) {
+          // Unauthorized error
+          toast.error("Unauthorized access. Please check your credentials.");
+        } else if (response.status === 404) {
+          // Not found error
+          toast.error("Requested resource not found.");
+        } else {
+          // Display a generic error message for other status codes
+          toast.error("An error occurred. Please try again later.");
+        }
       }
     } catch (error) {
-      console.error("Error logging in:", error);
-      alert("An error occurred. Please try again."); // Show generic error message
+      // Display error toast for network or server errors
+      toast.error("An error occurred. Please try again later.");
     }
   };
+
 
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
@@ -138,14 +159,14 @@ export default function LoginPage() {
           }}
         />
         <Box
-          sx={(theme)=>({
+          sx={(theme) => ({
             position: "absolute",
             width: "100%",
             height: "100%",
             backgroundImage:
-            theme.palette.mode === "light"
-              ? "linear-gradient(180deg, #CEE5FD, #FFF)"
-              : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
+              theme.palette.mode === "light"
+                ? "linear-gradient(180deg, #CEE5FD, #FFF)"
+                : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
           })}
         />
         <Grid
