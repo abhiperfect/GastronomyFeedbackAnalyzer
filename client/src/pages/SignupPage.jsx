@@ -95,6 +95,7 @@ export default function SignUpPage() {
     toast.error(message, {
       position: toast.POSITION.TOP_LEFT,
     });
+    
     function notifyInfo(message) {
       toast.info(message, {
         position: toast.POSITION.TOP_RIGHT,
