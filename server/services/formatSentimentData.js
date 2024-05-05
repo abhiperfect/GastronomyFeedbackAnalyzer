@@ -32,7 +32,6 @@ export default function formatData( inputData) {
     value: count,
     label: category,
   }));
- console.log("AA", formattedData);
   return formattedData;
 }
 
