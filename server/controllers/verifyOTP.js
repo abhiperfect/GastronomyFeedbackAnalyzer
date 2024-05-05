@@ -15,7 +15,7 @@ export default async function verifyOTP(req, res) {
     
     // Check if user data exists and if the OTP matches
     if (!userData || userData.otp !== otp) {
-      console.log("Inavlid Otp");
+      console.log("INVALID OTP");
       // If user data doesn't exist or OTP doesn't match, send error response
       return res.status(200).json({ success: false, message: "Invalid OTP." });
     }
@@ -38,7 +38,7 @@ export default async function verifyOTP(req, res) {
     // Delete user data from temporary storage
     await deleteUserFromTempDB(userId);
   } catch (error) {
-    console.error("Error:", error);
+    console.error("ERROR IN VERIFYING OTP :", error);
     res.status(500).json({ success: false, message: "Failed to verify OTP." });
   }
 }

@@ -37,7 +37,7 @@ const userLogin = async (req, res) => {
     }
   } catch (error) {
     console.log("USER LOGIN: INTERNAL SERVER ERROR.");
-    console.error("Error logging in:", error);
+    console.error("ERROR LOGIN IN:", error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
