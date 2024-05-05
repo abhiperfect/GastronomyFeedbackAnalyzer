@@ -19,6 +19,7 @@ import getOTPByEmail from "./controllers/getOTPByEmail.js";
 import userLogin from "./controllers/userLogin.js";
 import foodFeedbackRoute from './middleware/inertFoodFeedback.js'
 import foodqualitystatsRoute from './middleware/foodQualityStats.js'
+import getHostelList from './routes/getHostelList.js';
 const app = express();
 
 // parse application/x-www-form-urlencoded
@@ -26,15 +27,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 app.use(cors());
-app.use("/api", statisticsRoute);
-app.use("/api", sentimentRoute);
-app.use("/api",foodqualitystatsRoute);
+app.use("/api",foodqualitystatsRoute);     //ROUTE:1
+app.use("/api", sentimentRoute);           //ROUTE:3
+app.use("/api", statisticsRoute);          //ROUTE:4
 app.get("/", (req, res) => {
   res.send("Server is ok");
 });
 
-app.get("/totalrating", calculateTotalRating);
-app.get("/getattributescount", attributesCountsOfQuantData);
+app.get("/totalrating", calculateTotalRating);  //ROUTE:2
+app.get("/getattributescount", attributesCountsOfQuantData); //ROUTE:5
+
+app.get('/restaurants',getHostelList);
 app.post("/submit-feedback", submitFeedback);
 app.post('/foodfeedback',foodFeedbackRoute);
 
