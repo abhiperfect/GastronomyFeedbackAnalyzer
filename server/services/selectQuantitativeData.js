@@ -5,7 +5,7 @@ export default async function selectQuantitativeData() {
   try {
 
     const query = `
-      SELECT food_quality, cleanliness, menu_variety, staff_friendliness, age, length_of_stay, overall_satisfaction
+      SELECT food_quality, cleanliness, menu_variety, staff_friendliness, overall_satisfaction
       FROM feedback;
     `;
     const { rows } = await db.query(query);
