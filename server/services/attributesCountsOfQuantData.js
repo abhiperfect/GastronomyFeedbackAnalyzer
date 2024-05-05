@@ -1,4 +1,5 @@
-import selectQuantitativeData from "./selectQuantitativeData.js";
+import connectToDatabase from "../db/postgresClient.js";
+
 
 function transformData(data) {
   const result = Object.keys(data).map((key) => ({
@@ -10,19 +11,33 @@ function transformData(data) {
 
 const attributesCountsOfQuantData = async (req, res) => {
   try {
-    const rows = await selectQuantitativeData();
+
+    const hotelID = req.query.hotelID;
+
+    // Connect to the PostgreSQL database
+    const db = await connectToDatabase();
+  
+    // SQL query to join tables and retrieve relevant data
+    const query = `
+    SELECT ff.food_quality, ff.cleanliness, ff.menu_variety, ff.staff_friendliness, ff.overall_satisfaction
+    FROM feedback ff
+    JOIN restaurant_customer_feedback rcf ON ff.id = rcf.id
+    WHERE rcf.restaurant_id = $1`;
+  
+    // Execute the query with the hotelID parameter
+    const result = await db.query(query, [hotelID]);
+    const data = result.rows;
+  
     const attributeCounts = {
       food_quality: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
       cleanliness: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
       menu_variety: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
       staff_friendliness: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
-      // age: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
-      length_of_stay: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
       overall_satisfaction: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
     };
 
     // Iterate through each feedback and count the occurrences of each rating for each attribute
-    rows.forEach((feedback) => {
+    data.forEach((feedback) => {
       Object.keys(feedback).forEach((attribute) => {
         const rating = feedback[attribute];
         if (rating >= 1 && rating <= 5) {
@@ -31,8 +46,7 @@ const attributesCountsOfQuantData = async (req, res) => {
       });
     });
     const transformedData = transformData(attributeCounts);
-    console.log(transformedData);
-
+    console.log("ROUTE 1: FETCHED DATA SUCCESSFULLY");
     res.send({ data: transformedData });
   } catch (error) {
     console.log("Error in getting attributes count data:", error);
