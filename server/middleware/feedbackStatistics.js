@@ -62,43 +62,54 @@ app.get("/statistics", async (req, res) => {
 
   // SQL query to join tables and retrieve relevant data
   const query = `
-  SELECT ff.food_quality, ff.cleanliness, ff.menu_variety, ff.staff_friendliness, ff.overall_satisfaction
-  FROM feedback ff
-  JOIN restaurant_customer_feedback rcf ON ff.id = rcf.id
-  WHERE rcf.restaurant_id = $1`;
+    SELECT ff.food_quality, ff.cleanliness, ff.menu_variety, ff.staff_friendliness, ff.overall_satisfaction
+    FROM feedback ff
+    JOIN restaurant_customer_feedback rcf ON ff.id = rcf.id
+    WHERE rcf.restaurant_id = $1`;
 
-  // Execute the query with the hotelID parameter
-  const result = await db.query(query, [hotelID]);
-  const data = result.rows;
+  try {
+    // Execute the query with the hotelID parameter
+    const result = await db.query(query, [hotelID]);
+    const data = result.rows;
 
-  const numericalFields = [
-    "food_quality",
-    "cleanliness",
-    "menu_variety",
-    "staff_friendliness",
-    "overall_satisfaction",
-  ];
-  const statistics = {};
+    if (data.length === 0) {
+      // If no data found for the hotel ID, return an error response
+      return res.status(404).json({ error: "No data found for the given hotel ID" });
+    }
 
-  numericalFields.forEach((field) => {
-    const values = data.map((entry) => entry[field]);
-    const mean = calculateMean(values);
-    const sortedValues = [...values].sort((a, b) => a - b);
-    const median = calculateMedian(sortedValues);
-    const mode = calculateMode(values);
-    const standardDeviation = calculateStandardDeviation(values, mean);
-    const coefficientOfVariation = calculateCoefficientOfVariation(
-      standardDeviation,
-      mean
-    );
+    const numericalFields = [
+      "food_quality",
+      "cleanliness",
+      "menu_variety",
+      "staff_friendliness",
+      "overall_satisfaction",
+    ];
+    const statistics = {};
 
-    statistics[field] = {
-      coefficientOfVariation,
-    };
-  });
-  const transformedData = transformData(statistics);
-  console.log("ROUTE 4: FETCHED DATA SUCCESSFULLY");
-  res.json(transformedData);
+    numericalFields.forEach((field) => {
+      const values = data.map((entry) => entry[field]);
+      const mean = calculateMean(values);
+      const sortedValues = [...values].sort((a, b) => a - b);
+      const median = calculateMedian(sortedValues);
+      const mode = calculateMode(values);
+      const standardDeviation = calculateStandardDeviation(values, mean);
+      const coefficientOfVariation = calculateCoefficientOfVariation(
+        standardDeviation,
+        mean
+      );
+
+      statistics[field] = {
+        coefficientOfVariation,
+      };
+    });
+    const transformedData = transformData(statistics);
+    console.log("ROUTE 4: FETCHED DATA SUCCESSFULLY");
+    res.json(transformedData);
+  } catch (error) {
+    // Handle any database errors
+    console.error("Error fetching statistics:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 export default app;
