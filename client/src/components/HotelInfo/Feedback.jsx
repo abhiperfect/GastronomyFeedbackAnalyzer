@@ -21,15 +21,11 @@ export default function Feedback({ children }) {
   const [menuVariety, setMenuVariety] = useState("");
   const [staffFriendliness, setStaffFriendliness] = useState("");
   const [comments, setComments] = useState("");
-  const [age, setAge] = useState("");
-  const [gender, setGender] = useState("");
   const [lengthOfStay, setLengthOfStay] = useState("");
   const [mealPreference, setMealPreference] = useState("");
   const [mealTimes, setMealTimes] = useState("");
   const [suggestions, setSuggestions] = useState("");
   const [overallSatisfaction, setOverallSatisfaction] = useState("");
-  const [city, setCity] = useState("");
-  const [nationality, setNationality] = useState("");
   const notifyFormSubmit = () => {
     toast.success("Successfully submitted!", {
       position: "top-center",
@@ -40,9 +36,6 @@ export default function Feedback({ children }) {
       position: "top-center"
     });
   }
-  const handleNationalityChange = (event) => {
-    setNationality(event.target.value);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,10 +46,6 @@ export default function Feedback({ children }) {
       menuVariety,
       staffFriendliness,
       comments,
-      age,
-      gender,
-      nationality,
-      city,
       mealPreference,
       mealTimes,
       suggestions,
@@ -79,10 +68,6 @@ export default function Feedback({ children }) {
       setMenuVariety("");
       setStaffFriendliness("");
       setComments("");
-      setAge("");
-      setGender("");
-      setNationality("");
-      setCity("");
       setMealPreference("");
       setMealTimes("");
       setSuggestions("");
@@ -192,7 +177,7 @@ export default function Feedback({ children }) {
                 />
               </Grid>
               {/* Age */}
-              <Grid item xs={6}>
+              {/* <Grid item xs={6}>
                 <TextField
                   label="Age"
                   value={age}
@@ -200,9 +185,9 @@ export default function Feedback({ children }) {
                   fullWidth
                   required
                 />
-              </Grid>
+              </Grid> */}
               {/* Gender */}
-              <Grid item xs={6} fullWidth required>
+              {/* <Grid item xs={6} fullWidth required>
                 <FormControl fullWidth required>
                   <InputLabel>Gender</InputLabel>
                   <Select
@@ -214,9 +199,9 @@ export default function Feedback({ children }) {
                     <MenuItem value="other">Other</MenuItem>
                   </Select>
                 </FormControl>
-              </Grid>
+              </Grid> */}
               {/* Nationality */}
-              <Grid item xs={6}>
+              {/* <Grid item xs={6}>
                 <FormControl fullWidth required>
                   <InputLabel id="nationality-label">Nationality</InputLabel>
                   <Select
@@ -229,12 +214,11 @@ export default function Feedback({ children }) {
                     <MenuItem value="USA">USA</MenuItem>
                     <MenuItem value="UK">UK</MenuItem>
                     <MenuItem value="Canada">Canada</MenuItem>
-                    {/* Add more countries as needed */}
                   </Select>
                 </FormControl>
-              </Grid>
+              </Grid> */}
               {/* City */}
-              <Grid item xs={6}>
+              {/* <Grid item xs={6}>
                 <TextField
                   label="City"
                   value={city}
@@ -242,7 +226,7 @@ export default function Feedback({ children }) {
                   fullWidth
                   required
                 />
-              </Grid>
+              </Grid> */}
 
               {/* Meal Preference */}
               <Grid item xs={6}>
@@ -280,16 +264,6 @@ export default function Feedback({ children }) {
                 </FormControl>
               </Grid>
               {/* Suggestions */}
-              <Grid item xs={12}>
-                <TextField
-                  label="Suggestions"
-                  value={suggestions}
-                  onChange={(e) => setSuggestions(e.target.value)}
-                  fullWidth
-                  multiline
-                  required
-                />
-              </Grid>
               {/* Length of Stay */}
               <Grid item xs={6}>
                 <TextField
@@ -333,6 +307,16 @@ export default function Feedback({ children }) {
               </Grid>
 
               {/* Submit Button */}
+              <Grid item xs={12}>
+                <TextField
+                  label="Suggestions"
+                  value={suggestions}
+                  onChange={(e) => setSuggestions(e.target.value)}
+                  fullWidth
+                  multiline
+                  required
+                />
+              </Grid>
               <Grid item xs={12}>
                 <Button
                   type="submit"
