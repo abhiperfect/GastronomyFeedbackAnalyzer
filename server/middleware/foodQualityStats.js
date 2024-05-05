@@ -1,53 +1,92 @@
-import connectToDatabase from '../db/postgresClient.js';
-import express from 'express';
+// Import necessary modules
+import express from "express";
+import connectToDatabase from "../db/postgresClient.js";
 
+// Create Express app
 const app = express();
 
-app.get('/foodqualitystats', async (req, res) =>{
+// Endpoint to calculate food quality statistics
+app.get("/foodqualitystats", async (req, res) => {
   try {
+    // Extract hotelID from query parameters
+    const hotelID = req.query.hotelID;
 
-    // Connect to the database
-    const db = connectToDatabase();
+    // Connect to the PostgreSQL database
+    const db = await connectToDatabase();
 
-    // Columns for which to calculate coefficient of variance
-    const columns = ['taste', 'texture', 'presentation', 'freshness', 'aroma', 'portion_size', 'value_for_money', 'healthiness'];
+    // SQL query to join tables and retrieve relevant data
+    const query = `
+      SELECT 
+        ff.* 
+      FROM 
+        food_feedback ff
+      JOIN 
+        restaurant_customer_feedback rcf ON ff.id = rcf.id
+      WHERE 
+        rcf.restaurant_id = $1`;
 
-    // Object to store coefficient of variance for each column
+    // Execute the query with the hotelID parameter
+    const result = await db.query(query, [hotelID]);
+
+    // If there are no results, return an empty array
+    if (result.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No feedback found for the provided hotelID." });
+    }
+
+    // Extract feedback data from the result
+    const feedbackData = result.rows;
+
+    // Log or return the feedback data
     const coefficientOfVariances = {};
 
     // Calculate coefficient of variance for each column
-    for (const column of columns) {
-      const query = `SELECT ${column} FROM food_feedback`;
-      const result = await db.query(query);
-      const columnValues = result.rows.map(row => row[column]);
+    for (const column in feedbackData[0]) {
+      if (column !== "id") {
+        const columnValues = feedbackData.map((item) => item[column]);
 
-      // Calculate mean
-      const mean = columnValues.reduce((acc, val) => acc + val, 0) / columnValues.length;
+        // Calculate mean
+        const mean =
+          columnValues.reduce((acc, val) => acc + val, 0) / columnValues.length;
 
-      // Calculate variance
-      const variance = columnValues.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / columnValues.length;
+        // Calculate variance
+        const variance =
+          columnValues.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) /
+          columnValues.length;
 
-      // Calculate standard deviation
-      const standardDeviation = Math.sqrt(variance);
+        // Calculate standard deviation
+        const standardDeviation = Math.sqrt(variance);
 
-      // Calculate coefficient of variance
-      const coefficientOfVariance = 100-(standardDeviation / mean) * 100; // Convert to percentage
+        // Calculate coefficient of variance
+        const coefficientOfVariance = 100 - (standardDeviation / mean) * 100; // Convert to percentage
 
-      // Store coefficient of variance for the column
-      coefficientOfVariances[column] = coefficientOfVariance;
+        // Store coefficient of variance for the column
+        coefficientOfVariances[column] = coefficientOfVariance;
+      }
     }
-    const convertedData = Object.entries(coefficientOfVariances).map(([label, value]) => ({
-      coefficientOfVariance: value,
-      label,
-    }));
-    
+
+    // Convert data to desired format
+    const convertedData = Object.entries(coefficientOfVariances).map(
+      ([label, value]) => ({
+        coefficientOfVariance: value,
+        label,
+      })
+    );
+
     // Log or return the coefficient of variances for each column
-    console.log('Coefficient of Variances (Percentage):', convertedData);
+    console.log("Coefficient of Variances (Percentage):", convertedData);
     res.status(200).json({ convertedData });
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ success: false, message: 'Failed to calculate coefficient of variance.' });
-  }  
+    console.error("Error:", error);
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Failed to calculate coefficient of variance.",
+      });
+  }
 });
 
+// Export the Express app
 export default app;
