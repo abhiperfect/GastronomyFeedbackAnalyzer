@@ -11,26 +11,26 @@ import Footer from "../components/common/Footer.jsx";
 import { Typography } from "@mui/material";
 import ListHero from "../components/Hostel/ListHero.jsx";
 import UserHeader from "../components/common/UserHeader.jsx";
-import { useAuth } from "../context/context.js";
-import { useNavigate } from 'react-router-dom';
-import CircularProgress from '@mui/material/CircularProgress';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
-import getLPTheme from './getLPTheme';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { useSetMode } from '../context/context.js';
+import { useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
+import getLPTheme from "./getLPTheme";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { useSetMode } from "../context/context.js";
 import { alpha } from "@mui/material";
+import { useAuth } from "../context/context.js";
 
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
     <Box
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: '100dvw',
-        position: 'fixed',
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        width: "100dvw",
+        position: "fixed",
         bottom: 24,
       }}
     >
@@ -41,14 +41,14 @@ function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
         onChange={toggleCustomTheme}
         aria-label="Platform"
         sx={{
-          backgroundColor: 'background.default',
-          '& .Mui-selected': {
-            pointerEvents: 'none',
+          backgroundColor: "background.default",
+          "& .Mui-selected": {
+            pointerEvents: "none",
           },
         }}
       >
         <ToggleButton value>
-          <AutoAwesomeRoundedIcon sx={{ fontSize: '20px', mr: 1 }} />
+          <AutoAwesomeRoundedIcon sx={{ fontSize: "20px", mr: 1 }} />
           Custom theme 1
         </ToggleButton>
         <ToggleButton value={false}>Custom theme 2</ToggleButton>
@@ -71,10 +71,9 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-
 export default function HotelsList() {
   const { mode, setMode } = useSetMode();
-  const {isAuthenticated} = useAuth();
+  const { isAuthenticated, hotelList } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = React.useState(true);
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
@@ -83,35 +82,57 @@ export default function HotelsList() {
 
   const toggleColorMode = () => {
     // setMode('dark');
-    setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
+    setMode((prev) => (prev === "dark" ? "light" : "dark"));
   };
 
   const toggleCustomTheme = () => {
     setShowCustomTheme((prev) => !prev);
   };
 
-
   React.useEffect(() => {
     setIsLoading(true);
     // Simulate async authentication check
     const checkAuthentication = async () => {
       const storedToken = localStorage.getItem("token");
+
       // Your authentication check logic here...
       // For demonstration purposes, we're using a setTimeout to simulate an asynchronous operation
       setTimeout(() => {
         setIsLoading(false);
         if (!storedToken) {
-          navigate('/login');
+          navigate("/login");
         }
       }, 2000); // Simulating a 2-second delay
     };
 
     checkAuthentication();
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate]);if (!hotelList || !hotelList.data || hotelList.data.length === 0 || hotelList.length === 0) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
+        <CircularProgress />
+        {/* Optionally, you can display a message */}
+        <Typography variant="h6">No hotels found</Typography>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
         <CircularProgress />
       </div>
     );
@@ -119,74 +140,77 @@ export default function HotelsList() {
 
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
-    <React.Fragment>
-      <CssBaseline />
-      <UserHeader 
-      mode={mode} toggleColorMode={toggleColorMode}
-      />
-      <Container
-        maxWidth="false"
-        style={{
-          padding: "0",
-          // backgroundImage: `linear-gradient(180deg, #CEE5FD, #FFF)`, // Background image style
-          mt: 10,
-        }}
-      >
-        <Box
-          sx={(theme)=>({
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-            pt: 14, // Add padding top
-            maxWidth: "100vp",
-            backgroundImage:
-            theme.palette.mode === "light"
-              ? "linear-gradient(180deg, #CEE5FD, #FFF)"
-              : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
-          })}
-        >
-          <ListHero />
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            bgcolor: "",
-            height: "100vh",
-            width: "100%",
-            padding: "100px",
+      <React.Fragment>
+        <CssBaseline />
+        <UserHeader mode={mode} toggleColorMode={toggleColorMode} />
+        <Container
+          maxWidth="false"
+          style={{
+            padding: "0",
+            // backgroundImage: `linear-gradient(180deg, #CEE5FD, #FFF)`, // Background image style
+            mt: 10,
           }}
         >
+          <Box
+            sx={(theme) => ({
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              pt: 14, // Add padding top
+              maxWidth: "100vp",
+              backgroundImage:
+                theme.palette.mode === "light"
+                  ? "linear-gradient(180deg, #CEE5FD, #FFF)"
+                  : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
+            })}
+          >
+            <ListHero />
+          </Box>
           <Box
             sx={{
               display: "flex",
               flexWrap: "wrap",
-              direction: "row",
               justifyContent: "center",
+              bgcolor: "",
+              height: "100vh",
               width: "100%",
+              padding: "100px",
             }}
           >
-            <HotelCard></HotelCard>
-            <HotelCard></HotelCard>
-            <HotelCard></HotelCard>
-            <HotelCard></HotelCard>
-            <HotelCard></HotelCard>
-            <HotelCard></HotelCard>
-            <HotelCard></HotelCard>
-            <HotelCard></HotelCard>
-            <HotelCard></HotelCard>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                direction: "row",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
+              {hotelList.data.map((restaurant, index) => (
+                <HotelCard
+                  key={index}
+                  index={restaurant.restaurant_id}
+                  name={restaurant.name}
+                  address={restaurant.address}
+                  city={restaurant.city}
+                  state={restaurant.state}
+                  country={restaurant.country}
+                  phoneNumber={restaurant.phone_number}
+                  website={restaurant.website}
+                  image={restaurant.image}
+                />
+              ))}
+            </Box>
+            <Footer />
           </Box>
-          <Footer />
-        </Box>
-        <ToggleCustomTheme
-        showCustomTheme={showCustomTheme}
-        toggleCustomTheme={toggleCustomTheme}
-      />
-      </Container>
-    </React.Fragment>
+          <ToggleCustomTheme
+            showCustomTheme={showCustomTheme}
+            toggleCustomTheme={toggleCustomTheme}
+          />
+        </Container>
+      </React.Fragment>
     </ThemeProvider>
   );
 }
