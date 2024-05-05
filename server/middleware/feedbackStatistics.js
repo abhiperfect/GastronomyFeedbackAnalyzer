@@ -1,5 +1,5 @@
 import express from "express";
-import selectQuantitativeData from "../services/selectQuantitativeData.js";
+import connectToDatabase from "../db/postgresClient.js";
 
 const app = express();
 
@@ -54,7 +54,23 @@ const calculateCoefficientOfVariation = (standardDeviation, mean) =>
 
 // Calculate summary statistics
 app.get("/statistics", async (req, res) => {
-  const data = await selectQuantitativeData();
+  // Extract hotelID from query parameters
+  const hotelID = req.query.hotelID;
+
+  // Connect to the PostgreSQL database
+  const db = await connectToDatabase();
+
+  // SQL query to join tables and retrieve relevant data
+  const query = `
+  SELECT ff.food_quality, ff.cleanliness, ff.menu_variety, ff.staff_friendliness, ff.overall_satisfaction
+  FROM feedback ff
+  JOIN restaurant_customer_feedback rcf ON ff.id = rcf.id
+  WHERE rcf.restaurant_id = $1`;
+
+  // Execute the query with the hotelID parameter
+  const result = await db.query(query, [hotelID]);
+  const data = result.rows;
+
   const numericalFields = [
     "food_quality",
     "cleanliness",
@@ -81,7 +97,7 @@ app.get("/statistics", async (req, res) => {
     };
   });
   const transformedData = transformData(statistics);
-  console.log(transformedData);  
+  console.log("ROUTE 4: FETCHED DATA SUCCESSFULLY");
   res.json(transformedData);
 });
 
