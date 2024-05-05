@@ -85,6 +85,7 @@ export default function FeedbackPage() {
       const storedToken = localStorage.getItem("token");
       // Your authentication check logic here...
       // For demonstration purposes, we're using a setTimeout to simulate an asynchronous operation
+      
       setTimeout(() => {
         setIsLoading(false);
         if (!storedToken) {

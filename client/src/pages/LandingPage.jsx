@@ -1,6 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -12,7 +11,6 @@ import Header from '../components/common/Header.jsx';
 import Hero from '../components/Home/Hero.jsx';
 import LogoCollection from '../components/Home/LogoCollection.jsx';
 import Highlights from '../components/Home/Highlights.jsx';
-import Pricing from '../components/Home/Pricing.jsx';
 import Features from '../components/Home/Features.jsx';
 import Testimonials from '../components/Home/Testimonials.jsx';
 import FAQ from '../components/Home/FAQ.jsx';

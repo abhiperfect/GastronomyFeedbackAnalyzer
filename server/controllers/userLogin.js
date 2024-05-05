@@ -8,7 +8,7 @@ const userLogin = async (req, res) => {
   try {
     // Execute the query
     const result = await getOTPByEmail(email);
-
+    console.log("Login: ",result.rows);
     // Check if a row was found
     if (result.rows.length > 0) {
       const hashedPassword = result.rows[0].password_hash;
