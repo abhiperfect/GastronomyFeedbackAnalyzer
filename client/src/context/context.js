@@ -20,28 +20,38 @@ const Provider = ({ children }) => {
     totalFeedback: 0,
   });
   const [foodFeedback, setFoodFeedback] = useState([]);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [mode, setMode] = useState('dark');
+  const [ hotelId, setHotelId ] = useState(null);
+  const [ hotelList, setHotelList ] =  useState([]);
+
   useEffect(() => {
-    fetchSentimentAnalysisData();
     fetchUserData();
-    fetchAttributesCount();
-    fetchDataAnalysis();
-    fetchTotalFeedback();
-    fetchFoodFeedbackStats();
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
       setIsAuthenticated(true);
     }
   }, []);
+  
   useEffect(() => {
-    // Check if there's a token stored in local storage
-    const storedToken = localStorage.getItem("token");
+    // Check if hotelId is not null before fetching data
+    if (hotelId !== null) {
+      fetchFoodFeedbackStats(hotelId);        //HIT ROUTE:1 
+      fetchTotalFeedback(hotelId);            //HIT ROUTE:2
+      fetchSentimentAnalysisData(hotelId);    //HIT ROUTE:3
+      fetchDataAnalysis(hotelId);             //HIT ROUTE:4
+      fetchAttributesCount(hotelId);          //HIT ROUTE:5
+    }
+  }, [hotelId]);
+  useEffect(()=>{
+    fetchRestaurantData();
+  },[]);
 
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
     if (storedToken) {
-      // If there's a token, set the initial authentication state
       setUser(JSON.parse(localStorage.getItem("user")));
       setIsAuthenticated(true);
     }
@@ -49,13 +59,11 @@ const Provider = ({ children }) => {
 
   const login = (userData, token) => {
     console.log("login: I got call", token);
-    // Remove past user data and token
     localStorage.removeItem("user");
     localStorage.removeItem("token");
 
     setUser(userData);
     setIsAuthenticated(true);
-    // You can also store user data in localStorage for persistent login
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("token", token);
   };
@@ -63,63 +71,77 @@ const Provider = ({ children }) => {
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
-    // Remove stored user data and token
     localStorage.removeItem("user");
     localStorage.removeItem("token");
   };
 
-  const fetchFoodFeedbackStats = async () => {
+  const fetchFoodFeedbackStats = async (hotelID) => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/foodqualitystats"
+        `http://localhost:8000/api/foodqualitystats?hotelID=${hotelID}`
       );
       const data = response.data.convertedData;
       setFoodFeedback(data);
     } catch (error) {
       console.error("Error fetching Food feedback stats:", error);
+      setFoodFeedback([]); // Set default value for foodFeedback if error occurs
     }
   };
-  const fetchTotalFeedback = async () => {
+
+  const fetchTotalFeedback = async (hotelID) => {
     try {
-      const response = await axios.get("http://localhost:8000/totalrating");
+      const response = await axios.get(`http://localhost:8000/totalrating?hotelID=${hotelID}`);
       const data = response.data;
       setTotalFeedback(data);
     } catch (error) {
       console.error("Error fetching total feedback:", error);
+      setTotalFeedback({ rating: 0, totalFeedback: 0 }); // Set default value for totalFeedback if error occurs
     }
   };
 
-  const fetchSentimentAnalysisData = async () => {
+  const fetchSentimentAnalysisData = async (hotelID) => {
     try {
-      const response = await axios.get("http://localhost:8000/api/sentiment");
+      const response = await axios.get(`http://localhost:8000/api/sentiment?hotelID=${hotelID}`);
       const data = response.data;
       setSentimentAnalysis(data);
     } catch (error) {
       console.error("Error fetching sentiment analysis data:", error);
+      setSentimentAnalysis([]); // Set default value for sentimentAnalysis if error occurs
     }
   };
 
-  const fetchDataAnalysis = async () => {
+  const fetchDataAnalysis = async (hotelID) => {
     try {
-      const response = await axios.get("http://localhost:8000/api/statistics");
+      const response = await axios.get(`http://localhost:8000/api/statistics?hotelID=${hotelID}`);
       const data = response.data;
       setDataAnalysis(data);
     } catch (error) {
       console.error("Error fetching data analysis:", error);
+      setDataAnalysis([]); // Set default value for dataAnalysis if error occurs
     }
   };
 
-  const fetchAttributesCount = async () => {
+  const fetchAttributesCount = async (hotelID) => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/getattributescount"
-      );
+        `http://localhost:8000/getattributescount?hotelID=${hotelID}`);
       const data = response.data;
       setAttributesCount(data);
     } catch (error) {
       console.error("Error fetching attributes count:", error);
+      setAttributesCount([]); // Set default value for attributesCount if error occurs
     }
   };
+
+  async function fetchRestaurantData() {
+    try {
+      const response = await axios.get('http://localhost:8000/restaurants');
+      setHotelList(response.data);
+    } catch (error) {
+      console.error('Error fetching restaurant data:', error);
+      setHotelList([]); // Set default value for hotelList if error occurs
+    }
+  }
 
   const fetchUserData = async () => {
     try {
@@ -129,6 +151,7 @@ const Provider = ({ children }) => {
       // setUserData(data);
     } catch (error) {
       console.error("Error fetching user data:", error);
+      setUserData([]); // Set default value for userData if error occurs
     }
   };
 
@@ -140,7 +163,7 @@ const Provider = ({ children }) => {
             <TotalFeedbackContext.Provider value={{ totalFeedback }}>
               <FoodFeedbackQualityContext.Provider value={{ foodFeedback }}>
                 <AuthContext.Provider
-                  value={{ user, isAuthenticated, login, logout }}
+                  value={{ user, isAuthenticated, login, logout,hotelList,setHotelId }}
                 >
                   <ThemeModeContext.Provider value={{mode, setMode}}>{children}
                   </ThemeModeContext.Provider>
