@@ -46,7 +46,7 @@ const attributesCountsOfQuantData = async (req, res) => {
       });
     });
     const transformedData = transformData(attributeCounts);
-    console.log("ROUTE 1: FETCHED DATA SUCCESSFULLY");
+    console.log("ROUTE 5: FETCHED DATA SUCCESSFULLY");
     res.send({ data: transformedData });
   } catch (error) {
     console.log("Error in getting attributes count data:", error);
