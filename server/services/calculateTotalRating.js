@@ -44,7 +44,7 @@ export default async function calculateTotalRating(req, res) {
 
 
     const roundedRating = Math.ceil(weightedAverage);
-
+    console.log("ROUTE 2: FETCHED DATA SUCCESSFULLY");
     res.status(200).send({ rating: roundedRating.toString(), totalFeedback: data.length });
   } catch (error) {
     // Handle errors
