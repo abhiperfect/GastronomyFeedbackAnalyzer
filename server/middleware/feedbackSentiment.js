@@ -17,8 +17,6 @@ app.get("/sentiment", async (req, res) => {
     const suggestions = await getSuggestions(restaurant_id);
    
     // Perform sentiment analysis on comments and suggestions
-    console.log(comments);
-    console.log(suggestions);
     const commentSentiments = analyzeSentimentForBatch(comments);
     const suggestionSentiments = analyzeSentimentForBatch(suggestions);
     const categorizedComments = await categorizeComments(commentSentiments);
