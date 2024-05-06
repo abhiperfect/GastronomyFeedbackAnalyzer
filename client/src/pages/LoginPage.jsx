@@ -112,7 +112,7 @@ export default function LoginPage() {
       if (response.status === 200) {
         const responseData = response.data;
 
-        if (responseData.success ) {
+        if (responseData.success && responseData.userData.role === "user") {
           const token = response.data.token;
           login(response.data.userData, token);
           navigate("/hotellist");
