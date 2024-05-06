@@ -73,6 +73,7 @@ export default function LoginPage() {
   const { login, setUser } = useAuth();
   const { mode, setMode } = useSetMode();
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
+  const [loading, setLoading] = React.useState(false); // State variable to track loading state
   const LPtheme = createTheme(getLPTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });
   const notifyError = (message) =>
@@ -89,28 +90,42 @@ export default function LoginPage() {
   };
 
   const navigate = useNavigate();
-  
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const email = formData.get("email");
     const password = formData.get("password");
-
+    if (!password) {
+      // Display an error message to the user
+      toast.error("Please enter your password.");
+      return; // Exit the function early
+    }
+  
     try {
+      setLoading(true); // Start loading
       const response = await axios.post("http://localhost:8000/login", {
         email,
         password,
       });
-
+     
       if (response.status === 200) {
         const responseData = response.data;
-      
-        setUserData(responseData.userData);
-        if (responseData.success) {
+
+        if (responseData.success ) {
           const token = response.data.token;
           login(response.data.userData, token);
           navigate("/hotellist");
-          // Display success toast
+
+          toast.success(responseData.message);
+        }
+      else if (
+          responseData.success &&
+          responseData.userData.role === "manager"
+        ) {
+          const token = response.data.token;
+          login(response.data.userData, token);
+          navigate("/managerhotellist");
           toast.success(responseData.message);
         } else {
           // Display error toast with the appropriate message
@@ -134,9 +149,10 @@ export default function LoginPage() {
     } catch (error) {
       // Display error toast for network or server errors
       toast.error("An error occurred. Please try again later.");
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
-
 
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
@@ -239,7 +255,7 @@ export default function LoginPage() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+{loading ? "Signing In..." : "Sign In"}
               </Button>
               <Grid container>
                 <Grid item xs>
