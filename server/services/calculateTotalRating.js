@@ -4,18 +4,17 @@ export default async function calculateTotalRating(req, res) {
   const db = await connectToDatabase();
   try {
     const restaurant_id = req.query.hotelID;
-    console.log("total rating :: ", restaurant_id);
     const query = `
       SELECT ff.food_quality, ff.cleanliness, ff.menu_variety, ff.staff_friendliness, ff.overall_satisfaction
       FROM feedback ff
-      JOIN restaurant_customer_feedback rcf ON ff.id = rcf.id
+      JOIN restaurant_customer_feedback rcf ON ff.id = rcf.feedback_id
       WHERE rcf.restaurant_id = $1
     `;
 
     // Execute the query with the restaurant ID as a parameter
     const result = await db.query(query, [restaurant_id]);
     const data = result.rows;
-    // // Calculate average rating for each criterion
+
     const averageRatings = {
       food_quality: calculateAverageRating(
         data.map((entry) => entry.food_quality)
@@ -44,7 +43,7 @@ export default async function calculateTotalRating(req, res) {
 
 
     const roundedRating = Math.ceil(weightedAverage);
-    console.log("ROUTE 2: FETCHED DATA SUCCESSFULLY");
+    console.log("ROUTE 2: FETCHED DATA SUCCESSFULLY FOR HOTEL ID: ", restaurant_id);
     res.status(200).send({ rating: roundedRating.toString(), totalFeedback: data.length });
   } catch (error) {
     // Handle errors

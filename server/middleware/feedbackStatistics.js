@@ -64,7 +64,7 @@ app.get("/statistics", async (req, res) => {
   const query = `
     SELECT ff.food_quality, ff.cleanliness, ff.menu_variety, ff.staff_friendliness, ff.overall_satisfaction
     FROM feedback ff
-    JOIN restaurant_customer_feedback rcf ON ff.id = rcf.id
+    JOIN restaurant_customer_feedback rcf ON ff.id = rcf.feedback_id
     WHERE rcf.restaurant_id = $1`;
 
   try {
@@ -103,7 +103,7 @@ app.get("/statistics", async (req, res) => {
       };
     });
     const transformedData = transformData(statistics);
-    console.log("ROUTE 4: FETCHED DATA SUCCESSFULLY");
+    console.log("ROUTE 4: FETCHED DATA SUCCESSFULLY FOR HOSTEL ID: ", hotelID);
     res.json(transformedData);
   } catch (error) {
     // Handle any database errors

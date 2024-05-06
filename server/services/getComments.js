@@ -9,7 +9,7 @@ const getComments = async (restaurant_id) => {
     const query = `
     SELECT ff.comments
       FROM feedback ff
-      JOIN restaurant_customer_feedback rcf ON ff.id = rcf.id
+      JOIN restaurant_customer_feedback rcf ON ff.id = rcf.feedback_id
       WHERE rcf.restaurant_id = $1
     `;
 

@@ -21,13 +21,13 @@ const attributesCountsOfQuantData = async (req, res) => {
     const query = `
     SELECT ff.food_quality, ff.cleanliness, ff.menu_variety, ff.staff_friendliness, ff.overall_satisfaction
     FROM feedback ff
-    JOIN restaurant_customer_feedback rcf ON ff.id = rcf.id
+    JOIN restaurant_customer_feedback rcf ON ff.id = rcf.feedback_id
     WHERE rcf.restaurant_id = $1`;
   
     // Execute the query with the hotelID parameter
     const result = await db.query(query, [hotelID]);
     const data = result.rows;
-  
+
     const attributeCounts = {
       food_quality: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
       cleanliness: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
@@ -46,7 +46,7 @@ const attributesCountsOfQuantData = async (req, res) => {
       });
     });
     const transformedData = transformData(attributeCounts);
-    console.log("ROUTE 5: FETCHED DATA SUCCESSFULLY");
+    console.log("ROUTE 5: FETCHED DATA SUCCESSFULLY FOR HOTEL ID: ", hotelID);
     res.send({ data: transformedData });
   } catch (error) {
     console.log("Error in getting attributes count data:", error);

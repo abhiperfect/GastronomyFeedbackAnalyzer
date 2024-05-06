@@ -10,7 +10,7 @@ const getSuggestions = async (restaurant_id) => {
     const query = `
     SELECT ff.suggestions
       FROM feedback ff
-      JOIN restaurant_customer_feedback rcf ON ff.id = rcf.id
+      JOIN restaurant_customer_feedback rcf ON ff.id = rcf.feedback_id
       WHERE rcf.restaurant_id = $1
     `;
 

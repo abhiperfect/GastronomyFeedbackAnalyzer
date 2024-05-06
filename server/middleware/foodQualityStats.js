@@ -21,22 +21,22 @@ app.get("/foodqualitystats", async (req, res) => {
       FROM 
         food_feedback ff
       JOIN 
-        restaurant_customer_feedback rcf ON ff.id = rcf.id
+        restaurant_customer_feedback rcf ON ff.id = rcf.food_feedback_id
       WHERE 
         rcf.restaurant_id = $1`;
 
     // Execute the query with the hotelID parameter
     const result = await db.query(query, [hotelID]);
-
     // If there are no results, return an empty array
     if (result.rows.length === 0) {
       return res
         .status(404)
         .json({ message: "No feedback found for the provided hotelID." });
-    }
-
-    // Extract feedback data from the result
-    const feedbackData = result.rows;
+      }
+      
+      // Extract feedback data from the result
+      const feedbackData = result.rows;
+  
 
     // Log or return the feedback data
     const coefficientOfVariances = {};
@@ -74,7 +74,7 @@ app.get("/foodqualitystats", async (req, res) => {
       })
     );
 
-    console.log("ROUTE 1: FETCHED DATA SUCCESSFULLY");
+    console.log("ROUTE 1: FETCHED DATA SUCCESSFULLY FOR HOTEL ID: ",hotelID);
     res.status(200).json({ convertedData });
   } catch (error) {
     console.error("Error:", error);

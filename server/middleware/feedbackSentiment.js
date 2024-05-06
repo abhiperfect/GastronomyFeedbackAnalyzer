@@ -15,9 +15,10 @@ app.get("/sentiment", async (req, res) => {
     const comments = await getComments(restaurant_id);
 
     const suggestions = await getSuggestions(restaurant_id);
-    // console.log("Sug D" ,suggestionsData);
+   
     // Perform sentiment analysis on comments and suggestions
-
+    console.log(comments);
+    console.log(suggestions);
     const commentSentiments = analyzeSentimentForBatch(comments);
     const suggestionSentiments = analyzeSentimentForBatch(suggestions);
     const categorizedComments = await categorizeComments(commentSentiments);
@@ -31,7 +32,7 @@ app.get("/sentiment", async (req, res) => {
     };
 
     const formattedData = formatData(inputData);
-    console.log("ROUTE 3: FETCHED DATA SUCCESSFULLY");
+    console.log("ROUTE 3: FETCHED DATA SUCCESSFULLY FOR HOSTEL ID : ", restaurant_id);
     res.status(200).json({ formattedData });
   } catch {
     console.error("Error calculating total rating:", error);
