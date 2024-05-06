@@ -9,10 +9,6 @@ const submitFeedback = async (req, res) => {
       menuVariety,
       staffFriendliness,
       comments,
-      age,
-      gender,
-      nationality,
-      city,
       mealPreference,
       mealTimes,
       suggestions,
@@ -37,16 +33,13 @@ const submitFeedback = async (req, res) => {
         menu_variety,
         staff_friendliness,
         comments,
-        age,
-        gender,
-        nationality,
-        city,
         meal_preference,
         meal_times,
         suggestions,
         length_of_stay,
         overall_satisfaction
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      RETURNING id;
     `;
 
     const values = [
@@ -55,10 +48,6 @@ const submitFeedback = async (req, res) => {
       menuVariety,
       staffFriendliness,
       comments,
-      age,
-      gender,
-      nationality,
-      city,
       mealPreference,
       mealTimes,
       suggestions,
@@ -66,9 +55,10 @@ const submitFeedback = async (req, res) => {
       overallSatisfaction
     ];
 
-    await db.query(query, values);
-
-    res.status(200).json({ success: true, message: 'Feedback submitted successfully.' });
+    const result = await db.query(query, values);
+    const feedbackId = result.rows[0].id; 
+    
+    res.status(200).json({ success: true, message: 'Feedback submitted successfully.', feedbackId: feedbackId });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ success: false, message: 'Failed to submit feedback.' });

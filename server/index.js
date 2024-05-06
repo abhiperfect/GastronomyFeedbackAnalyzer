@@ -20,6 +20,10 @@ import userLogin from "./controllers/userLogin.js";
 import foodFeedbackRoute from './middleware/inertFoodFeedback.js'
 import foodqualitystatsRoute from './middleware/foodQualityStats.js'
 import getHostelList from './routes/getHostelList.js';
+import submitRCF from './middleware/submitRCF.js';
+
+
+
 const app = express();
 
 // parse application/x-www-form-urlencoded
@@ -40,7 +44,7 @@ app.get("/getattributescount", attributesCountsOfQuantData); //ROUTE:5
 app.get('/restaurants',getHostelList);
 app.post("/submit-feedback", submitFeedback);
 app.post('/foodfeedback',foodFeedbackRoute);
-
+app.post('/submitrcf',submitRCF);
 
 app.post("/verify-otp", verifyOTP);
 app.post("/signup", generateOTPAndSend);

@@ -20,9 +20,9 @@ const foodFeedbackRoute = async (req, res) => {
     const values = [taste, texture, presentation, freshness, aroma,portionSize, valueForMoney, healthiness];
 
     const result = await db.query(query, values);
-    const feedbackId = result.rows[0].id;
+    const foodFeedbackId = result.rows[0].id;
   
-    res.status(201).json({ feedbackId });
+    res.status(201).json({ foodFeedbackId: foodFeedbackId });
   } catch (error) {
     console.error('Error inserting data:', error);
     res.status(500).send('Internal server error');
