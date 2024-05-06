@@ -12,6 +12,7 @@ import HotelsList from "./pages/HotelsList";
 import FeedbackPage from "./pages/FeedbackPage";
 import { Provider } from "./context/context";
 import { ToastContainer } from "react-toastify";
+import ManagerHotelsList from './pages/ManagerHotelsList';
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
               <Route path="/signup" element={<SignUpPage />}></Route>
               <Route path="/hotellist" element={<HotelsList />}></Route>
               <Route path="/feedbackpage" element={<FeedbackPage />}></Route>
+              <Route path="/managerhotellist" element={<ManagerHotelsList />}></Route>
             </Routes>
         </Provider>
       </BrowserRouter>
