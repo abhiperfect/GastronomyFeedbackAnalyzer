@@ -21,7 +21,7 @@ import foodFeedbackRoute from './middleware/inertFoodFeedback.js'
 import foodqualitystatsRoute from './middleware/foodQualityStats.js'
 import getHostelList from './routes/getHostelList.js';
 import submitRCF from './middleware/submitRCF.js';
-
+import addHotelRoute from './middleware/addHotel.js';
 
 
 const app = express();
@@ -31,6 +31,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 app.use(cors());
+app.use('/api', addHotelRoute);
 app.use("/api",foodqualitystatsRoute);     //ROUTE:1
 app.use("/api", sentimentRoute);           //ROUTE:3
 app.use("/api", statisticsRoute);          //ROUTE:4
