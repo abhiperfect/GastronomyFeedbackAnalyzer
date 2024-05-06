@@ -28,13 +28,13 @@ const Provider = ({ children }) => {
   const [mode, setMode] = useState("dark");
   const [hotelId, setHotelId] = useState(null);
   const [hotelList, setHotelList] = useState([]);
-
+  const [ currentId, setCurrentId ] = useState(null);
+  
   useEffect(() => {
     if (userData.length > 0) {
       const user = userData[0];
       const userId = user.user_id;
       setUser(userId);
-
     }
     if (
       feedbackId !== null &&
@@ -42,9 +42,8 @@ const Provider = ({ children }) => {
       hotelId !== null &&
       userId !== null
     ) {
-      console.log("Context:  ", hotelId,userId, feedbackId, foodFeedbackId);
+      console.log("Context:  ", hotelId, userId, feedbackId, foodFeedbackId);
       submitFeedback();
-
     }
   }, [hotelId, feedbackId, foodFeedbackId, userId, userData]);
 
@@ -67,8 +66,10 @@ const Provider = ({ children }) => {
     }
   }, [hotelId]);
   useEffect(() => {
-    fetchRestaurantData();
-  }, [userData]);
+    if (userId != null) {
+      fetchRestaurantData();
+    }
+  }, [userId]);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -78,30 +79,32 @@ const Provider = ({ children }) => {
     }
   }, []);
 
-  
   const submitFeedback = async () => {
     const feedbackData = {
-      hotelId:  hotelId,
+      hotelId: hotelId,
       userId: userId,
       feedbackId: feedbackId,
-      foodFeedbackId: foodFeedbackId
+      foodFeedbackId: foodFeedbackId,
     };
     setFoodFeedbackId(null);
     setFeedbackId(null);
 
     try {
-      const response = await axios.post('http://localhost:8000/submitrcf', feedbackData);
-      console.log('Response:', response.data);
+      const response = await axios.post(
+        "http://localhost:8000/submitrcf",
+        feedbackData
+      );
+      console.log("Response:", response.data);
     } catch (error) {
-      console.error('Error submitting feedback:', error.message);
+      console.error("Error submitting feedback:", error.message);
     }
   };
-  
-  const login = (userData, token) => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
 
+  const login = (userData, token) => {
+    // localStorage.removeItem("user");
+    // localStorage.removeItem("token");    
     setUser(userData);
+    setCurrentId(userData.user_id);
     setIsAuthenticated(true);
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("token", token);
@@ -198,13 +201,13 @@ const Provider = ({ children }) => {
   async function fetchRestaurantData() {
     try {
       const response = await axios.get("http://localhost:8000/restaurants");
+      console.log("context: ",response.data);
       setHotelList(response.data);
     } catch (error) {
       console.error("Error fetching restaurant data:", error);
       setHotelList([]); // Set default value for hotelList if error occurs
     }
   }
-
 
   return (
     <SentimentAnalysisContext.Provider value={{ sentimentAnalysis }}>
@@ -215,7 +218,7 @@ const Provider = ({ children }) => {
               <FoodFeedbackQualityContext.Provider value={{ foodFeedback }}>
                 <AuthContext.Provider
                   value={{
-                    userId,
+                    currentId,
                     isAuthenticated,
                     setUser,
                     login,
