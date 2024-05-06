@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography, Modal, TextField, Grid } from '@mui/material';
 import axios from 'axios';
+import { useAuth } from '../../context/context';
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -13,7 +15,9 @@ const style = {
   p: 4,
 };
 
+
 export default function FoodFeedback() {
+  const { setFoodFeedbackId }= useAuth();
   const [open, setOpen] = React.useState(false);
   const [feedback, setFeedback] = useState({
     taste: '',
@@ -68,8 +72,11 @@ export default function FoodFeedback() {
   };
   const submitFormData = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/foodfeedback', feedback); // Assuming your server is running on the same domain
-      console.log(response.data); // Handle success response
+      const response = await axios.post('http://localhost:8000/foodfeedback', feedback); 
+      console.log("food feedback:: ",response.data.foodFeedbackId); 
+      setFoodFeedbackId(response.data.foodFeedbackId);
+
+      // Handle success response
       // You can perform any additional actions upon successful submission here
     } catch (error) {
       console.error('Error submitting form data:', error.response); // Handle error

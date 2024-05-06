@@ -25,7 +25,7 @@ import { useAuth } from "../context/context";
 import { useSetMode } from "../context/context.js";
 import { alpha } from "@mui/material";
 import { toast } from "react-toastify";
-
+import { useUserContext } from "../context/context";
 const defaultTheme = createTheme();
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
@@ -69,6 +69,7 @@ ToggleCustomTheme.propTypes = {
   toggleCustomTheme: PropTypes.func.isRequired,
 };
 export default function LoginPage() {
+  const { setUserData } = useUserContext();
   const { login, setUser } = useAuth();
   const { mode, setMode } = useSetMode();
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
@@ -104,7 +105,7 @@ export default function LoginPage() {
       if (response.status === 200) {
         const responseData = response.data;
       
-        setUser(responseData.userData[0].user_id);
+        setUserData(responseData.userData);
         if (responseData.success) {
           const token = response.data.token;
           login(response.data.userData, token);

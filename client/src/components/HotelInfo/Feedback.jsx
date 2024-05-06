@@ -15,7 +15,10 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import FoodFeedback from "./FoodFeedback";
+import { useAuth } from "../../context/context";
+
 export default function Feedback({ children }) {
+  const { setFeedbackId } = useAuth();
   const [foodQuality, setFoodQuality] = useState("");
   const [cleanliness, setCleanliness] = useState("");
   const [menuVariety, setMenuVariety] = useState("");
@@ -59,7 +62,7 @@ export default function Feedback({ children }) {
         "http://localhost:8000/submit-feedback",
         formData
       );
-
+      setFeedbackId(response.data.feedbackId);
       // Handle success response
       console.log("Feedback submitted successfully:", response.data);
       // reset the form fields here
@@ -176,58 +179,6 @@ export default function Feedback({ children }) {
                   required
                 />
               </Grid>
-              {/* Age */}
-              {/* <Grid item xs={6}>
-                <TextField
-                  label="Age"
-                  value={age}
-                  onChange={(e) => setAge(e.target.value)}
-                  fullWidth
-                  required
-                />
-              </Grid> */}
-              {/* Gender */}
-              {/* <Grid item xs={6} fullWidth required>
-                <FormControl fullWidth required>
-                  <InputLabel>Gender</InputLabel>
-                  <Select
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value)}
-                  >
-                    <MenuItem value="male">Male</MenuItem>
-                    <MenuItem value="female">Female</MenuItem>
-                    <MenuItem value="other">Other</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid> */}
-              {/* Nationality */}
-              {/* <Grid item xs={6}>
-                <FormControl fullWidth required>
-                  <InputLabel id="nationality-label">Nationality</InputLabel>
-                  <Select
-                    labelId="nationality-label"
-                    id="nationality"
-                    value={nationality}
-                    onChange={handleNationalityChange}
-                  >
-                    <MenuItem value="IND">India</MenuItem>
-                    <MenuItem value="USA">USA</MenuItem>
-                    <MenuItem value="UK">UK</MenuItem>
-                    <MenuItem value="Canada">Canada</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid> */}
-              {/* City */}
-              {/* <Grid item xs={6}>
-                <TextField
-                  label="City"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  fullWidth
-                  required
-                />
-              </Grid> */}
-
               {/* Meal Preference */}
               <Grid item xs={6}>
                 <FormControl fullWidth required>
