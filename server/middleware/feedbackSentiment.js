@@ -34,7 +34,7 @@ app.get("/sentiment", async (req, res) => {
     const formattedData = formatData(inputData);
     console.log("ROUTE 3: FETCHED DATA SUCCESSFULLY FOR HOSTEL ID : ", restaurant_id);
     res.status(200).json({ formattedData });
-  } catch {
+  } catch (error){
     console.error("Error calculating total rating:", error);
     res.status(500).send("Internal Server Error");
   }
