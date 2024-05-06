@@ -28,24 +28,39 @@ const Provider = ({ children }) => {
   const [mode, setMode] = useState("dark");
   const [hotelId, setHotelId] = useState(null);
   const [hotelList, setHotelList] = useState([]);
-  const [ currentId, setCurrentId ] = useState(null);
-  
+  const [currentId, setCurrentId] = useState(null);
+
   useEffect(() => {
-    if (userData.length > 0) {
-      const user = userData[0];
-      const userId = user.user_id;
-      setUser(userId);
-    }
+    const submitFeedback = async () => {
+      const feedbackData = {
+        hotelId: hotelId,
+        userId: currentId,
+        feedbackId: feedbackId,
+        foodFeedbackId: foodFeedbackId,
+      };
+      setFoodFeedbackId(null);
+      setFeedbackId(null);
+
+      try {
+        const response = await axios.post(
+          "http://localhost:8000/submitrcf",
+          feedbackData
+        );
+        console.log("Response:", response.data);
+      } catch (error) {
+        console.error("Error submitting feedback:", error.message);
+      }
+    };
+
     if (
       feedbackId !== null &&
       foodFeedbackId !== null &&
       hotelId !== null &&
-      userId !== null
+      currentId !== null
     ) {
-      console.log("Context:  ", hotelId, userId, feedbackId, foodFeedbackId);
       submitFeedback();
     }
-  }, [hotelId, feedbackId, foodFeedbackId, userId, userData]);
+  }, [hotelId, feedbackId, foodFeedbackId, currentId]);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -79,30 +94,9 @@ const Provider = ({ children }) => {
     }
   }, []);
 
-  const submitFeedback = async () => {
-    const feedbackData = {
-      hotelId: hotelId,
-      userId: userId,
-      feedbackId: feedbackId,
-      foodFeedbackId: foodFeedbackId,
-    };
-    setFoodFeedbackId(null);
-    setFeedbackId(null);
-
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/submitrcf",
-        feedbackData
-      );
-      console.log("Response:", response.data);
-    } catch (error) {
-      console.error("Error submitting feedback:", error.message);
-    }
-  };
-
   const login = (userData, token) => {
     // localStorage.removeItem("user");
-    // localStorage.removeItem("token");    
+    // localStorage.removeItem("token");
     setUser(userData);
     setCurrentId(userData.user_id);
     setIsAuthenticated(true);
@@ -201,7 +195,7 @@ const Provider = ({ children }) => {
   async function fetchRestaurantData() {
     try {
       const response = await axios.get("http://localhost:8000/restaurants");
-      console.log("context: ",response.data);
+      console.log("context: ", response.data);
       setHotelList(response.data);
     } catch (error) {
       console.error("Error fetching restaurant data:", error);
