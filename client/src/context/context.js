@@ -15,39 +15,60 @@ const Provider = ({ children }) => {
   const [userData, setUserData] = useState([]);
   const [attributesCount, setAttributesCount] = useState([]);
   const [dataAnalysis, setDataAnalysis] = useState([]);
+  const [foodFeedbackId, setFoodFeedbackId] = useState(null);
+  const [feedbackId, setFeedbackId] = useState(null);
+
   const [totalFeedback, setTotalFeedback] = useState({
     rating: 0,
     totalFeedback: 0,
   });
   const [foodFeedback, setFoodFeedback] = useState([]);
-  const [user, setUser] = useState();
+  const [userId, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [mode, setMode] = useState('dark');
-  const [ hotelId, setHotelId ] = useState(null);
-  const [ hotelList, setHotelList ] =  useState([]);
+  const [mode, setMode] = useState("dark");
+  const [hotelId, setHotelId] = useState(null);
+  const [hotelList, setHotelList] = useState([]);
 
   useEffect(() => {
-    fetchUserData();
+    if (userData.length > 0) {
+      const user = userData[0];
+      const userId = user.user_id;
+      setUser(userId);
+
+    }
+    if (
+      feedbackId !== null &&
+      foodFeedbackId !== null &&
+      hotelId !== null &&
+      userId !== null
+    ) {
+      console.log("Context:  ", hotelId,userId, feedbackId, foodFeedbackId);
+      submitFeedback();
+
+    }
+  }, [hotelId, feedbackId, foodFeedbackId, userId, userData]);
+
+  useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
       setIsAuthenticated(true);
     }
   }, []);
-  
+
   useEffect(() => {
     // Check if hotelId is not null before fetching data
     if (hotelId !== null) {
-      fetchFoodFeedbackStats(hotelId);        //HIT ROUTE:1 
-      fetchTotalFeedback(hotelId);            //HIT ROUTE:2
-      fetchSentimentAnalysisData(hotelId);    //HIT ROUTE:3
-      fetchDataAnalysis(hotelId);             //HIT ROUTE:4
-      fetchAttributesCount(hotelId);          //HIT ROUTE:5
+      fetchFoodFeedbackStats(hotelId); //HIT ROUTE:1
+      fetchTotalFeedback(hotelId); //HIT ROUTE:2
+      fetchSentimentAnalysisData(hotelId); //HIT ROUTE:3
+      fetchDataAnalysis(hotelId); //HIT ROUTE:4
+      fetchAttributesCount(hotelId); //HIT ROUTE:5
     }
   }, [hotelId]);
-  useEffect(()=>{
+  useEffect(() => {
     fetchRestaurantData();
-  },[]);
+  }, [userData]);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -57,8 +78,26 @@ const Provider = ({ children }) => {
     }
   }, []);
 
+  
+  const submitFeedback = async () => {
+    const feedbackData = {
+      hotelId:  hotelId,
+      userId: userId,
+      feedbackId: feedbackId,
+      foodFeedbackId: foodFeedbackId
+    };
+    setFoodFeedbackId(null);
+    setFeedbackId(null);
+
+    try {
+      const response = await axios.post('http://localhost:8000/submitrcf', feedbackData);
+      console.log('Response:', response.data);
+    } catch (error) {
+      console.error('Error submitting feedback:', error.message);
+    }
+  };
+  
   const login = (userData, token) => {
-    console.log("login: I got call", token);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
 
@@ -73,6 +112,22 @@ const Provider = ({ children }) => {
     setIsAuthenticated(false);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+
+    // Reset all context states
+    setSentimentAnalysis([]);
+    setUserData([]);
+    setAttributesCount([]);
+    setDataAnalysis([]);
+    setFoodFeedbackId(null);
+    setFeedbackId(null);
+    setTotalFeedback({
+      rating: 0,
+      totalFeedback: 0,
+    });
+    setFoodFeedback([]);
+    setMode("dark");
+    setHotelId(null);
+    setHotelList([]);
   };
 
   const fetchFoodFeedbackStats = async (hotelID) => {
@@ -90,7 +145,9 @@ const Provider = ({ children }) => {
 
   const fetchTotalFeedback = async (hotelID) => {
     try {
-      const response = await axios.get(`http://localhost:8000/totalrating?hotelID=${hotelID}`);
+      const response = await axios.get(
+        `http://localhost:8000/totalrating?hotelID=${hotelID}`
+      );
       const data = response.data;
       setTotalFeedback(data);
     } catch (error) {
@@ -101,7 +158,9 @@ const Provider = ({ children }) => {
 
   const fetchSentimentAnalysisData = async (hotelID) => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/sentiment?hotelID=${hotelID}`);
+      const response = await axios.get(
+        `http://localhost:8000/api/sentiment?hotelID=${hotelID}`
+      );
       const data = response.data;
       setSentimentAnalysis(data);
     } catch (error) {
@@ -112,7 +171,9 @@ const Provider = ({ children }) => {
 
   const fetchDataAnalysis = async (hotelID) => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/statistics?hotelID=${hotelID}`);
+      const response = await axios.get(
+        `http://localhost:8000/api/statistics?hotelID=${hotelID}`
+      );
       const data = response.data;
       setDataAnalysis(data);
     } catch (error) {
@@ -124,7 +185,8 @@ const Provider = ({ children }) => {
   const fetchAttributesCount = async (hotelID) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/getattributescount?hotelID=${hotelID}`);
+        `http://localhost:8000/getattributescount?hotelID=${hotelID}`
+      );
       const data = response.data;
       setAttributesCount(data);
     } catch (error) {
@@ -135,37 +197,37 @@ const Provider = ({ children }) => {
 
   async function fetchRestaurantData() {
     try {
-      const response = await axios.get('http://localhost:8000/restaurants');
+      const response = await axios.get("http://localhost:8000/restaurants");
       setHotelList(response.data);
     } catch (error) {
-      console.error('Error fetching restaurant data:', error);
+      console.error("Error fetching restaurant data:", error);
       setHotelList([]); // Set default value for hotelList if error occurs
     }
   }
 
-  const fetchUserData = async () => {
-    try {
-      // Replace 'YOUR_USER_API_ENDPOINT' with your actual user API endpoint
-      // const response = await axios.get('YOUR_USER_API_ENDPOINT');
-      // const data = response.data;
-      // setUserData(data);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-      setUserData([]); // Set default value for userData if error occurs
-    }
-  };
 
   return (
     <SentimentAnalysisContext.Provider value={{ sentimentAnalysis }}>
-      <UserContext.Provider value={{ userData }}>
+      <UserContext.Provider value={{ userData, setUserData }}>
         <AttributesCountContext.Provider value={{ attributesCount }}>
           <DataAnalysisContext.Provider value={{ dataAnalysis }}>
             <TotalFeedbackContext.Provider value={{ totalFeedback }}>
               <FoodFeedbackQualityContext.Provider value={{ foodFeedback }}>
                 <AuthContext.Provider
-                  value={{ user, isAuthenticated, login, logout,hotelList,setHotelId }}
+                  value={{
+                    userId,
+                    isAuthenticated,
+                    setUser,
+                    login,
+                    logout,
+                    hotelList,
+                    setHotelId,
+                    setFeedbackId,
+                    setFoodFeedbackId,
+                  }}
                 >
-                  <ThemeModeContext.Provider value={{mode, setMode}}>{children}
+                  <ThemeModeContext.Provider value={{ mode, setMode }}>
+                    {children}
                   </ThemeModeContext.Provider>
                 </AuthContext.Provider>
               </FoodFeedbackQualityContext.Provider>
