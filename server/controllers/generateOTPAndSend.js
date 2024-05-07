@@ -42,8 +42,8 @@ export async function generateOTPAndSend(req, res) {
 
     // Generate a 6-digit OTP
     const otp = generateOTP();
-    // const emailSent = await sendOtpEmail(email, otp);
-    // const info = await transporter.sendMail(mailOptions);
+    const emailSent = await sendOtpEmail(email, otp);
+    const info = await transporter.sendMail(mailOptions);
     // console.log(`Message sent: ${info.messageId}`);
     const dataInsertingSuccefully = insertUserIntoTempDatabase(
       userId,

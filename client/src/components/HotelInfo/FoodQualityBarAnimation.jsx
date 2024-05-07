@@ -9,22 +9,23 @@ const chartSetting = {
   yAxis: [
     {
       label: 'Food Quality Analysis (%)',
+      domain: [0, 100], // Fixed y-axis domain from 0 to 100
     },
   ],
-  series: [{ dataKey: 'coefficientOfVariance', label: 'Food Quality Analysis', valueFormatter }],
+  series: [{ dataKey: 'value', label: 'Food Quality Analysis', valueFormatter }],
   height: 500,
   sx: {
     [`& .${axisClasses.directionY} .${axisClasses.label}`]: {
-      transform: 'translateX(-10px)',
+      transform: 'translateX(-10px)' ,
     },
   },
 };
 
 export default function FoodQualityBarAnimation() {
   const { foodFeedback } = useFoodFeedbackQualityContext();
-  const data = foodFeedback.map(({ label, coefficientOfVariance }) => ({
+  const data = foodFeedback.map(({ label, value }) => ({
     label,
-    coefficientOfVariance: parseFloat(coefficientOfVariance.toFixed(2)), // Round to 2 decimal places
+    value: parseFloat(value.toFixed(2)), // Round to 2 decimal places
   }));
 
   return (
@@ -33,6 +34,7 @@ export default function FoodQualityBarAnimation() {
         dataset={data}
         xAxis={[{ scaleType: 'band', dataKey: 'label' }]}
         {...chartSetting}
+        yDomain={[0, 100]}
       />
     </div>
   );

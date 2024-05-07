@@ -15,11 +15,12 @@ import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 import Box from "@mui/material/Box";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "../components/common/Header";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 import { useAuth } from "../context/context.js";
-import { useNavigate } from 'react-router-dom';
-import { useSetMode } from '../context/context.js';
+import { useNavigate } from "react-router-dom";
+import { useSetMode } from "../context/context.js";
 import { alpha } from "@mui/material";
+
 const defaultTheme = createTheme();
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
@@ -63,11 +64,12 @@ ToggleCustomTheme.propTypes = {
   toggleCustomTheme: PropTypes.func.isRequired,
 };
 export default function FeedbackPage() {
+  const { login, setUser, setUserRole, userRole } = useAuth();
   const { mode, setMode } = useSetMode();
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   const LPtheme = createTheme(getLPTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });
-  const {isAuthenticated} = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = React.useState(true);
 
@@ -85,11 +87,11 @@ export default function FeedbackPage() {
       const storedToken = localStorage.getItem("token");
       // Your authentication check logic here...
       // For demonstration purposes, we're using a setTimeout to simulate an asynchronous operation
-      
+
       setTimeout(() => {
         setIsLoading(false);
         if (!storedToken) {
-          navigate('/login');
+          navigate("/login");
         }
       }, 2000); // Simulating a 2-second delay
     };
@@ -99,38 +101,47 @@ export default function FeedbackPage() {
 
   if (isLoading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
         <CircularProgress />
       </div>
     );
   }
   return (
     <HostelInfo>
-          <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
-      <UserHeader 
-       userheader={true}
-      mode={mode} toggleColorMode={toggleColorMode}/>
-      <Box
-        sx={(theme)=>({
-          backgroundImage:
-          theme.palette.mode === "light"
-            ? "linear-gradient(180deg, #CEE5FD, #FFF)"
-            : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
-        })}
-      >
-      <TitlebarImageList />
-      <HotelDetail />
-      <Divider />
-      <FeedbackAnalysis />
-      <Divider />
-      <Feedback />
-      <Divider />
-      <Footer />
-      <ToggleCustomTheme
-        showCustomTheme={showCustomTheme}
-        toggleCustomTheme={toggleCustomTheme}
-      />
-      </Box>
+      <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
+        <UserHeader
+          userheader={true}
+          mode={mode}
+          toggleColorMode={toggleColorMode}
+        />
+        <Box
+          sx={(theme) => ({
+            backgroundImage:
+              theme.palette.mode === "light"
+                ? "linear-gradient(180deg, #CEE5FD, #FFF)"
+                : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
+          })}
+        >
+          <TitlebarImageList />
+          <HotelDetail />
+          <Divider />
+          <FeedbackAnalysis />
+          <Divider />
+          {userRole === "user" && <Feedback />}
+          <Divider />
+          <Footer />
+          <ToggleCustomTheme
+            showCustomTheme={showCustomTheme}
+            toggleCustomTheme={toggleCustomTheme}
+          />
+        </Box>
       </ThemeProvider>
     </HostelInfo>
   );

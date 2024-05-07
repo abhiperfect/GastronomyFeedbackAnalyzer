@@ -17,6 +17,7 @@ const Provider = ({ children }) => {
   const [dataAnalysis, setDataAnalysis] = useState([]);
   const [foodFeedbackId, setFoodFeedbackId] = useState(null);
   const [feedbackId, setFeedbackId] = useState(null);
+  const [ userRole, setUserRole ] = useState('user');
 
   const [totalFeedback, setTotalFeedback] = useState({
     rating: 0,
@@ -221,6 +222,8 @@ const Provider = ({ children }) => {
                     setHotelId,
                     setFeedbackId,
                     setFoodFeedbackId,
+                    setUserRole,
+                    userRole
                   }}
                 >
                   <ThemeModeContext.Provider value={{ mode, setMode }}>

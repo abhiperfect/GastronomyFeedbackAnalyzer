@@ -35,8 +35,8 @@ export default function ListHero(){
       color="text.secondary"
       sx={{ alignSelf: "center", width: { sm: "100%", md: "100%" } }}
     >
-      Find your perfect stay from our curated selection of top-rated
-      hotels.
+      {/* Find your perfect stay from our curated selection of top-rated
+      hotels. */}
     </Typography>
     
   </Box>

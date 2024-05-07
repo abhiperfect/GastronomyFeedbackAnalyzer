@@ -12,7 +12,7 @@ const chartSetting = {
     },
   ],
   series: [
-    { dataKey: 'coefficientOfVariation', label: 'Customer Satisfaction Percentage', valueFormatter, color: '#B20DCF' }
+    { dataKey: 'value', label: 'Customer Satisfaction Percentage', valueFormatter, color: '#B20DCF' }
   ],
   height: 500,
   sx: {
