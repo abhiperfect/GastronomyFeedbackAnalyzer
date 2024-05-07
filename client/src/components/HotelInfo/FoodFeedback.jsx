@@ -69,6 +69,17 @@ export default function FoodFeedback() {
     console.log(feedback);
     submitFormData();
     handleClose();
+    setFeedback({
+      taste: '',
+      texture: '',
+      presentation: '',
+      freshness: '',
+      aroma: '',
+      portionSize: '',
+      valueForMoney: '',
+      healthiness: ''
+    }
+    );
   };
   const submitFormData = async () => {
     try {
