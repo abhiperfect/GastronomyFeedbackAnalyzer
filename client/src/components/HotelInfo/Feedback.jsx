@@ -25,8 +25,8 @@ export default function Feedback({ children }) {
   const [staffFriendliness, setStaffFriendliness] = useState("");
   const [comments, setComments] = useState("");
   const [lengthOfStay, setLengthOfStay] = useState("");
-  const [mealPreference, setMealPreference] = useState("");
-  const [mealTimes, setMealTimes] = useState("");
+  const [mealPreference, setMealPreference] = useState("Vegetarian");
+  const [mealTimes, setMealTimes] = useState("Breakfast");
   const [suggestions, setSuggestions] = useState("");
   const [overallSatisfaction, setOverallSatisfaction] = useState("");
   const notifyFormSubmit = () => {
@@ -101,7 +101,7 @@ export default function Feedback({ children }) {
         <Typography variant="h3" gutterBottom>
           We Value Your Feedback
         </Typography>
-        <Box sx={{ bgcolor: "", height: "120vh" }}>
+        <Box sx={{ bgcolor: "", height: "80vh" }}>
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               {/* Food Quality */}
@@ -180,7 +180,7 @@ export default function Feedback({ children }) {
                 />
               </Grid>
               {/* Meal Preference */}
-              <Grid item xs={6}>
+              {/* <Grid item xs={6}>
                 <FormControl fullWidth required>
                   <InputLabel id="meal-preference-label">
                     Meal Preference
@@ -194,12 +194,12 @@ export default function Feedback({ children }) {
                     <MenuItem value="Vegetarian">Vegetarian</MenuItem>
                     <MenuItem value="Non-Vegetarian">Non-Vegetarian</MenuItem>
                     <MenuItem value="Vegan">Vegan</MenuItem>
-                    {/* Add more options as needed */}
+                    
                   </Select>
                 </FormControl>
-              </Grid>
+              </Grid> */}
               {/* Meal Times */}
-              <Grid item xs={6}>
+              {/* <Grid item xs={6}>
                 <FormControl fullWidth required>
                   <InputLabel id="meal-times-label">Meal Times</InputLabel>
                   <Select
@@ -213,7 +213,7 @@ export default function Feedback({ children }) {
                     <MenuItem value="Dinner">Dinner</MenuItem>
                   </Select>
                 </FormControl>
-              </Grid>
+              </Grid> */}
               {/* Suggestions */}
               {/* Length of Stay */}
               <Grid item xs={6}>
@@ -227,6 +227,15 @@ export default function Feedback({ children }) {
               </Grid>
               {/* Overall Satisfaction */}
               <Grid item xs={6}>
+                <TextField
+                  label="overall-satisfaction-label"
+                  value={overallSatisfaction}
+                  onChange={(e) => setOverallSatisfaction(e.target.value)}
+                  fullWidth
+                  required
+                />
+              </Grid>
+              {/* <Grid item xs={6}>
                 <FormControl
                   fullWidth
                   required
@@ -255,7 +264,7 @@ export default function Feedback({ children }) {
                     </FormHelperText>
                   )}
                 </FormControl>
-              </Grid>
+              </Grid> */}
 
               {/* Submit Button */}
               <Grid item xs={12}>
