@@ -205,10 +205,10 @@ export default function HotelsList() {
             </Box>
             <Footer />
           </Box>
-          <ToggleCustomTheme
+          {/* <ToggleCustomTheme
             showCustomTheme={showCustomTheme}
             toggleCustomTheme={toggleCustomTheme}
-          />
+          /> */}
         </Container>
       </React.Fragment>
     </ThemeProvider>

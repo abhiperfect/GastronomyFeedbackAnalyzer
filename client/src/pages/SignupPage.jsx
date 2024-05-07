@@ -381,10 +381,10 @@ export default function SignUpPage() {
           <Box sx={{ mt: 5 }}></Box>
         </Container>
         <Footer />
-        <ToggleCustomTheme
+        {/* <ToggleCustomTheme
         showCustomTheme={showCustomTheme}
         toggleCustomTheme={toggleCustomTheme}
-      />
+      /> */}
       </Box>
     </ThemeProvider>
   );

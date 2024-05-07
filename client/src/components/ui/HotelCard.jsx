@@ -17,7 +17,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useNavigate } from "react-router-dom";
 import CardLoading from "./CardLoading";
 import { useAuth } from "../../context/context.js";
-
+import { Link } from "@mui/material";
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -49,11 +49,18 @@ export default function HotelCard({
     setExpanded(!expanded);
   };
   const handleCardClick = (id) => {
-
     setHotelId(id);
     navigate("/feedbackpage", {
       state: {
-        // phoneNumber,
+        index,
+        name,
+        address,
+        city,
+        State :state,
+        country,
+        phoneNumber,
+        website,
+        image,
       },
     });
   };
@@ -79,7 +86,7 @@ export default function HotelCard({
       index={index}
       sx={{ maxWidth: 345, margin: "20px" }}
       style={{ cursor: "pointer" }}
-      onClick={() => handleCardClick(index)} // Pass the key or hotel_id here
+      
     >
       <CardHeader
         avatar={
@@ -100,8 +107,12 @@ export default function HotelCard({
         height="194"
         image="./images/hotel1.jpg"
         alt="Paella dish"
+        onClick={() => handleCardClick(index)} // Pass the key or hotel_id here
       />
       <CardContent>
+        <Link variant="body2" color="text.secondary">
+          {website}
+        </Link>
         <Typography variant="body2" color="text.secondary">
           {address} {city}, {state},{country}
         </Typography>

@@ -14,7 +14,10 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import LogoutButton from "../common/LogoutButton";
 import Profile from "../common/Profile";
+import {  useAuth, useUserContext } from "../../context/context";
+
 export default function User() {
+  const { userProfile } = useAuth();
   const settings = [<Profile/>,<LogoutButton/>];
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -38,7 +41,7 @@ export default function User() {
     <Box sx={{ flexGrow: 0 }}>
       <Tooltip title="Open settings">
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+          <Avatar  alt={`${userProfile.first_name}`} src="/static/images/avatar/2.jpg" />
         </IconButton>
       </Tooltip>
       <Menu

@@ -20,9 +20,9 @@ const userLogin = async (req, res) => {
       const { password_hash, ...userData } = result.rows[0];
       // Compare the provided password with the hashed password from the database
       const passwordMatch = await bcrypt.compare(password, password_hash);
-
+    
       if (passwordMatch) {
-        const token = jwt.sign({ userId: userData.user_id }, 'your_jwt_secret', { expiresIn: '1h' }); 
+        const token = jwt.sign({ userData: result.rows, userId: userData.user_id }, 'your_jwt_secret', { expiresIn: '1h' }); 
         console.log("USER LOGIN: USER LOGGED IN SUCCESSFULLY.");
         res.status(200).json({ success: true, message: "Login successful", userData, token });
       } else {

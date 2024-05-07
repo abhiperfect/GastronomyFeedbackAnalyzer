@@ -70,7 +70,7 @@ ToggleCustomTheme.propTypes = {
 };
 export default function LoginPage() {
   const { setUserData } = useUserContext();
-  const { login, setUser ,setUserRole} = useAuth();
+  const { login, setUser ,setUserRole, setUserProfile} = useAuth();
   const { mode, setMode } = useSetMode();
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   const [loading, setLoading] = React.useState(false); // State variable to track loading state
@@ -111,10 +111,13 @@ export default function LoginPage() {
      
       if (response.status === 200) {
         const responseData = response.data;
-
+        console.log("Login:        ",response.data.userData);
+        setUserProfile(response.data.userData);
+        setUserData(response.data.userData);
         if (responseData.success && responseData.userData.role === "user") {
           const token = response.data.token;
           setUserRole("user");
+
           login(response.data.userData, token);
           navigate("/hotellist");
 

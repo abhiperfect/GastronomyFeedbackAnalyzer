@@ -137,10 +137,10 @@ export default function FeedbackPage() {
           {userRole === "user" && <Feedback />}
           <Divider />
           <Footer />
-          <ToggleCustomTheme
+          {/* <ToggleCustomTheme
             showCustomTheme={showCustomTheme}
             toggleCustomTheme={toggleCustomTheme}
-          />
+          /> */}
         </Box>
       </ThemeProvider>
     </HostelInfo>

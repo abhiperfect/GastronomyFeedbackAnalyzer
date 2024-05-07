@@ -30,7 +30,7 @@ const Provider = ({ children }) => {
   const [hotelId, setHotelId] = useState(null);
   const [hotelList, setHotelList] = useState([]);
   const [currentId, setCurrentId] = useState(null);
-
+  const[userProfile, setUserProfile] = useState(null);
   useEffect(() => {
     const submitFeedback = async () => {
       const feedbackData = {
@@ -223,7 +223,9 @@ const Provider = ({ children }) => {
                     setFeedbackId,
                     setFoodFeedbackId,
                     setUserRole,
-                    userRole
+                    userRole,
+                    setUserProfile,
+                    userProfile
                   }}
                 >
                   <ThemeModeContext.Provider value={{ mode, setMode }}>

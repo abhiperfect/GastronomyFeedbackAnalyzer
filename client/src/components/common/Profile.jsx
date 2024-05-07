@@ -12,7 +12,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import ProfileBottomBar from "./ProfileBottomBar";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { useAuth } from "../../context/context";
+import {  useAuth, useUserContext } from "../../context/context";
 
 const Fade = React.forwardRef(function Fade(props, ref) {
   const {
@@ -70,7 +70,7 @@ const style = {
 };
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { userProfile } = useAuth();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -99,7 +99,7 @@ export default function Profile() {
       >
         <Fade in={open}>
           <Box sx={style}>
-            {user && user.length > 0 && (
+            {userProfile && (
               <Box
                 sx={{
                   display: "flex",
@@ -116,21 +116,20 @@ export default function Profile() {
                   }}
                 >
                   <div>
-                    <ProfilePhoto name={user[0].first_name} />
+                    {/* Display profile photo */}
+                    <ProfilePhoto name={`${userProfile.first_name} ${userProfile.last_name}`} />
                   </div>
                 </Box>
                 <Typography variant="h6" gutterBottom>
-                  {user[0].first_name} {user[0].last_name}
+                  {/* Display first name and last name */}
+                  {userProfile.first_name} {userProfile.last_name}
                 </Typography>
-                <div style={{ display:'flex',
-                 flexDirection:'column',
-                 justifyContent:'center',
-                 alignContent:'center'
-                }}>
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignContent: 'center' }}>
                   <Typography variant="subtitle1" gutterBottom>
+                    {/* Display email */}
                     <Typography className="text-muted mb-4">
-                     @User <span className="mx-2">|</span>
-                      <a href="#!"> {user[0].email}</a>
+                      @User <span className="mx-2">|</span>
+                      <a href="#!">{userProfile.email}</a>
                     </Typography>
                   </Typography>
                 </div>
@@ -145,15 +144,10 @@ export default function Profile() {
                       }}
                     >
                       <div>
-                        <FacebookOutlinedIcon
-                          style={{ fontSize: 40, cursor: "pointer" }}
-                        />
-                        <TwitterIcon
-                          style={{ fontSize: 40, cursor: "pointer" }}
-                        />
-                        <InstagramIcon
-                          style={{ fontSize: 40, cursor: "pointer" }}
-                        />
+                        {/* Display social media icons */}
+                        <FacebookOutlinedIcon style={{ fontSize: 40, cursor: "pointer" }} />
+                        <TwitterIcon style={{ fontSize: 40, cursor: "pointer" }} />
+                        <InstagramIcon style={{ fontSize: 40, cursor: "pointer" }} />
                       </div>
                     </Box>
                   </Typography>
@@ -166,7 +160,8 @@ export default function Profile() {
                     alignItems: "center",
                   }}
                 >
-                  <Button
+                  {userProfile.role !== 'manager' &&
+                    <Button
                     variant="outlined"
                     size="large"
                     sx={{
@@ -176,7 +171,7 @@ export default function Profile() {
                     }}
                   >
                     Look Your Feedbacks
-                  </Button>
+                  </Button>}
                 </div>
               </Box>
             )}
@@ -187,3 +182,4 @@ export default function Profile() {
     </div>
   );
 }
+

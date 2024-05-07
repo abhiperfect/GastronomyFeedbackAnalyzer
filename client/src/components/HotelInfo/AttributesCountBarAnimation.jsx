@@ -11,7 +11,7 @@ import Rating from '@mui/material/Rating';
 
 export default function AttributesCountBarAnimation() {
   const [value, setValue] = React.useState(2);
-  const [seriesNb, setSeriesNb] = React.useState(3);
+  const [seriesNb, setSeriesNb] = React.useState(5);
   const [itemNb, setItemNb] = React.useState(5);
   const [skipAnimation, setSkipAnimation] = React.useState(false);
   const [replacedLabels, setReplacedLabels] = React.useState([]);
